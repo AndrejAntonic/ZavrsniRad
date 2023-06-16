@@ -8,6 +8,7 @@ import com.example.foikadrovskanfc.utils.NfcUtils
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
         val nfcUtils = NfcUtils(this)
         val hasNfcCapability = nfcUtils.hasNfcCapability()

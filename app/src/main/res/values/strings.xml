@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FOI Kadrovska NFC</string>
+    <string name="nfcNSupported">This device does not support NFC.</string>
+    <string name="close">Close</string>
 </resources>

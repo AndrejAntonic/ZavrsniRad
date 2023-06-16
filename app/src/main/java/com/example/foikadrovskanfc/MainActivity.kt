@@ -1,6 +1,12 @@
 package com.example.foikadrovskanfc
 
+import android.app.Activity
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.Window
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import com.example.foikadrovskanfc.utils.NfcUtils
@@ -20,7 +26,23 @@ class MainActivity : ComponentActivity() {
             else
                 Toast.makeText(this, "NFC is supported but not enabled", Toast.LENGTH_SHORT).show()
         } else
-            Toast.makeText(this, "NFC is not supported on this device", Toast.LENGTH_SHORT).show()
+            showNfcNotSupportedDialog()
+    }
+
+    private fun showNfcNotSupportedDialog() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.nfc_not_supported_dialog)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val btnClose : Button = dialog.findViewById(R.id.nfcNSupported_btn)
+
+        btnClose.setOnClickListener{
+            finish()
+        }
+
+        dialog.show()
     }
 }
 

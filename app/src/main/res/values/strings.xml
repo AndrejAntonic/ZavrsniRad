@@ -4,4 +4,5 @@
     <string name="nfcNEnabled">The NFC is not enabled.</string>
     <string name="close">Close</string>
     <string name="enable">Enable</string>
+    <string name="generateImage">Generate image</string>
 </resources>

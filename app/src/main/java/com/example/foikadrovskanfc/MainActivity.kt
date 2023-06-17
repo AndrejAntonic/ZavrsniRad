@@ -16,9 +16,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.foikadrovskanfc.adapters.PersonnelAdapter
 import com.example.foikadrovskanfc.helpers.MockDataLoader
 import com.example.foikadrovskanfc.utils.NfcUtils
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : ComponentActivity() {
     private lateinit var recyclerView: RecyclerView
+    private lateinit var fabPersonnel: FloatingActionButton
+    private val adapter = PersonnelAdapter(MockDataLoader.getDemoData())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -26,8 +29,17 @@ class MainActivity : ComponentActivity() {
         checkNfcCapability()
 
         recyclerView = findViewById(R.id.rv_personnelRecords)
-        recyclerView.adapter = PersonnelAdapter(MockDataLoader.getDemoData())
+        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
+
+        fabPersonnel = findViewById(R.id.fab_generateImage)
+        fabPersonnel.setOnClickListener{
+            val checkedTags = adapter.getSelectedItems()
+            var message = ""
+            for (tag in checkedTags)
+                message += tag.id
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun checkNfcCapability() {

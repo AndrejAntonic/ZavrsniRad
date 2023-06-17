@@ -12,7 +12,7 @@ import com.example.foikadrovskanfc.entities.Personnel
 
 class PersonnelAdapter(private val personnelList: List<Personnel>) :
     RecyclerView.Adapter<PersonnelAdapter.PersonnelViewHolder>() {
-
+    private val selectedItems: MutableList<Personnel> = mutableListOf()
     inner class PersonnelViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val personnelCard: CardView
         private val personnelId: CheckBox
@@ -30,8 +30,15 @@ class PersonnelAdapter(private val personnelList: List<Personnel>) :
             personnelCard.setOnClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
+                    val personnel = personnelList[position]
                     val isChecked = !personnelId.isChecked
                     personnelId.isChecked = isChecked
+
+                    if (isChecked) {
+                        selectedItems.add(personnel)
+                    } else {
+                        selectedItems.remove(personnel)
+                    }
                 }
             }
         }
@@ -55,5 +62,9 @@ class PersonnelAdapter(private val personnelList: List<Personnel>) :
 
     override fun onBindViewHolder(holder: PersonnelViewHolder, position: Int) {
         holder.bind(personnelList[position])
+    }
+
+    fun getSelectedItems(): List<Personnel> {
+        return selectedItems.toList()
     }
 }

@@ -11,14 +11,23 @@ import android.view.Window
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.foikadrovskanfc.adapters.PersonnelAdapter
+import com.example.foikadrovskanfc.helpers.MockDataLoader
 import com.example.foikadrovskanfc.utils.NfcUtils
 
 class MainActivity : ComponentActivity() {
+    private lateinit var recyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         checkNfcCapability()
+
+        recyclerView = findViewById(R.id.rv_personnelRecords)
+        recyclerView.adapter = PersonnelAdapter(MockDataLoader.getDemoData())
+        recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
     private fun checkNfcCapability() {

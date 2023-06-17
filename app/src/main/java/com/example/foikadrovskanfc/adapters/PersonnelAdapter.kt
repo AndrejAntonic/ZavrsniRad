@@ -5,22 +5,35 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foikadrovskanfc.R
 import com.example.foikadrovskanfc.entities.Personnel
 
-class PersonnelAdapter(private val personnelList : List<Personnel>) : RecyclerView.Adapter<PersonnelAdapter.PersonnelViewHolder>() {
+class PersonnelAdapter(private val personnelList: List<Personnel>) :
+    RecyclerView.Adapter<PersonnelAdapter.PersonnelViewHolder>() {
+
     inner class PersonnelViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val personnelCard: CardView
         private val personnelId: CheckBox
         private val personnelTitle: TextView
         private val personnelFirstName: TextView
         private val personnelLastName: TextView
 
         init {
+            personnelCard = view.findViewById(R.id.cw_personnelCard)
             personnelId = view.findViewById(R.id.chb_personnelId)
             personnelTitle = view.findViewById(R.id.tw_personnelTitle)
             personnelFirstName = view.findViewById(R.id.tw_personnelFirstName)
             personnelLastName = view.findViewById(R.id.tw_personnelLastName)
+
+            personnelCard.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val isChecked = !personnelId.isChecked
+                    personnelId.isChecked = isChecked
+                }
+            }
         }
 
         fun bind(personnel: Personnel) {

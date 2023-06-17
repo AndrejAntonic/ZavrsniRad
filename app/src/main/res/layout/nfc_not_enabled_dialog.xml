@@ -17,7 +17,7 @@
         <TextView
             android:text="@string/nfcNEnabled"
             android:gravity="center"
-            android:id="@+id/nfcNEnabled_tw"
+            android:id="@+id/tw_nfcNEnabled"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="20sp"
@@ -33,7 +33,7 @@
             android:layout_marginTop="20dp">
 
             <Button
-                android:id="@+id/nfcNEnabledClose_btn"
+                android:id="@+id/btn_nfcNEnabledClose"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
@@ -44,7 +44,7 @@
             <Button
                 android:text="@string/enable"
                 android:gravity="center"
-                android:id="@+id/nfcNEnabledEnable_btn"
+                android:id="@+id/btn_nfcNEnabledEnable"
                 android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

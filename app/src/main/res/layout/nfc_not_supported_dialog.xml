@@ -18,7 +18,7 @@
         <TextView
             android:text="@string/nfcNSupported"
             android:gravity="center"
-            android:id="@+id/nfcNSupported_tw"
+            android:id="@+id/tw_nfcNSupported"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="20sp"
@@ -29,7 +29,7 @@
         <Button
             android:text="@string/close"
             android:gravity="center"
-            android:id="@+id/nfcNSupported_btn"
+            android:id="@+id/btn_nfcNSupported"
             android:textColor="@color/black"
             android:layout_marginTop="20dp"
             android:layout_width="wrap_content"

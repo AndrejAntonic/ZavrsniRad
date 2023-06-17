@@ -1,6 +1,5 @@
 package com.example.foikadrovskanfc
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
@@ -44,8 +43,8 @@ class MainActivity : ComponentActivity() {
         dialog.setContentView(R.layout.nfc_not_enabled_dialog)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        val btnClose : Button = dialog.findViewById(R.id.nfcNEnabledClose_btn)
-        val btnEnable : Button = dialog.findViewById(R.id.nfcNEnabledEnable_btn)
+        val btnClose : Button = dialog.findViewById(R.id.btn_nfcNEnabledClose)
+        val btnEnable : Button = dialog.findViewById(R.id.btn_nfcNEnabledEnable)
 
         btnClose.setOnClickListener{
             finish()
@@ -72,7 +71,7 @@ class MainActivity : ComponentActivity() {
         dialog.setContentView(R.layout.nfc_not_supported_dialog)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        val btnClose : Button = dialog.findViewById(R.id.nfcNSupported_btn)
+        val btnClose : Button = dialog.findViewById(R.id.btn_nfcNSupported)
 
         btnClose.setOnClickListener{
             finish()

@@ -2,9 +2,12 @@ package com.example.foikadrovskanfc
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Window
 import android.widget.Button
 import android.widget.Toast
@@ -16,6 +19,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        checkNfcCapability()
+    }
+
+    private fun checkNfcCapability() {
         val nfcUtils = NfcUtils(this)
         val hasNfcCapability = nfcUtils.hasNfcCapability()
         val isNfcEnabled = nfcUtils.isNfcEnabled()
@@ -25,8 +32,37 @@ class MainActivity : ComponentActivity() {
                 Toast.makeText(this, "NFC is supported and enabled", Toast.LENGTH_SHORT).show()
             else
                 Toast.makeText(this, "NFC is supported but not enabled", Toast.LENGTH_SHORT).show()
+                //showNfcNotEnabledDialog()
         } else
             showNfcNotSupportedDialog()
+    }
+
+    private fun showNfcNotEnabledDialog(){
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.nfc_not_enabled_dialog)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val btnClose : Button = dialog.findViewById(R.id.nfcNEnabledClose_btn)
+        val btnEnable : Button = dialog.findViewById(R.id.nfcNEnabledEnable_btn)
+
+        btnClose.setOnClickListener{
+            finish()
+        }
+
+        btnEnable.setOnClickListener{
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                val intent = Intent(Settings.ACTION_NFC_SETTINGS)
+                startActivity(intent)
+            }
+            else{
+                val intent = Intent(Settings.ACTION_WIRELESS_SETTINGS)
+                startActivity(intent)
+            }
+        }
+
+        dialog.show()
     }
 
     private fun showNfcNotSupportedDialog() {

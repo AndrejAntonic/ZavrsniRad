@@ -37,6 +37,7 @@ class MainActivity : ComponentActivity() {
             val checkedTags = adapter.getSelectedItems()
             if(checkedTags.isNotEmpty()) {
                 val intent = Intent(this, CanvasActivity::class.java)
+                intent.putExtra("personnelList", ArrayList(checkedTags))
                 startActivity(intent)
             }
             else

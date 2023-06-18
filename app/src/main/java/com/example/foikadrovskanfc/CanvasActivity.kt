@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.graphics.Canvas
 import android.util.Log
 import androidx.core.content.ContextCompat
+import com.example.foikadrovskanfc.entities.Personnel
 import java.io.ByteArrayOutputStream
 
 class CanvasActivity : AppCompatActivity() {
@@ -30,9 +31,11 @@ class CanvasActivity : AppCompatActivity() {
 
         imageView = findViewById(R.id.imgw_generatedImage)
         val logoDrawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.foilogo75x65)
-        val text = "Proba"
+        val receivedList = intent.getSerializableExtra("personnelList") as ArrayList<Personnel>
+        val firstPersonnel = receivedList.firstOrNull()
+        val title = firstPersonnel?.title ?: ""
 
-        val originalImageBitmap = createImageBitmap(width, height, logoDrawable, text)
+        val originalImageBitmap = createImageBitmap(width, height, logoDrawable, title)
         val scaledImageBitmap = Bitmap.createScaledBitmap(originalImageBitmap, 100, 75, false)
         imageView.setImageBitmap(originalImageBitmap)
 

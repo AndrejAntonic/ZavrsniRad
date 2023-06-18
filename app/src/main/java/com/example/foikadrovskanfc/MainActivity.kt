@@ -34,8 +34,13 @@ class MainActivity : ComponentActivity() {
 
         fabPersonnel = findViewById(R.id.fab_generateImage)
         fabPersonnel.setOnClickListener{
-            val intent = Intent(this, CanvasActivity::class.java)
-            startActivity(intent)
+            val checkedTags = adapter.getSelectedItems()
+            if(checkedTags.isNotEmpty()) {
+                val intent = Intent(this, CanvasActivity::class.java)
+                startActivity(intent)
+            }
+            else
+                Toast.makeText(this, "Please select an employee first!", Toast.LENGTH_SHORT).show()
             /*
             val checkedTags = adapter.getSelectedItems()
             var message = ""

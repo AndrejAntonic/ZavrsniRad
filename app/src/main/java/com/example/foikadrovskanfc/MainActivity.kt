@@ -34,11 +34,15 @@ class MainActivity : ComponentActivity() {
 
         fabPersonnel = findViewById(R.id.fab_generateImage)
         fabPersonnel.setOnClickListener{
+            val intent = Intent(this, CanvasActivity::class.java)
+            startActivity(intent)
+            /*
             val checkedTags = adapter.getSelectedItems()
             var message = ""
             for (tag in checkedTags)
                 message += tag.id
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+             */
         }
     }
 

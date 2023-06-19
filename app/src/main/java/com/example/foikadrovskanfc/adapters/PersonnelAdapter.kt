@@ -32,15 +32,19 @@ class PersonnelAdapter(private val personnelList: List<Personnel>) :
                 if (position != RecyclerView.NO_POSITION) {
                     val personnel = personnelList[position]
                     val isChecked = !personnelId.isChecked
-                    personnelId.isChecked = isChecked
 
-                    if (isChecked) {
-                        selectedItems.add(personnel)
-                    } else {
-                        selectedItems.remove(personnel)
+                    if(selectedItems.size != 4 || !isChecked){
+                        personnelId.isChecked = isChecked
+                        if (isChecked) {
+                            selectedItems.add(personnel)
+                        } else {
+                            selectedItems.remove(personnel)
+                        }
                     }
                 }
             }
+
+            // TODO: Dodati provjeru za checkbox kao sto je gore za karticu
         }
 
         fun bind(personnel: Personnel) {

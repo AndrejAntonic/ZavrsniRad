@@ -72,10 +72,73 @@ class CanvasActivity : AppCompatActivity() {
         when(receivedList.size) {
             1 -> canvas = addOnePersonnel(receivedList, canvas)
             2 -> canvas = addTwoPersonnel(receivedList, canvas)
-            //3 -> canvas = addThreePersonnel(receivedList, canvas)
+            3 -> canvas = addThreePersonnel(receivedList, canvas)
         }
 
         return bitmap
+    }
+
+    private fun addThreePersonnel(receivedList: java.util.ArrayList<Personnel>, canvas: Canvas): Canvas {
+        //TODO: Popraviti sortiranje po velicini
+        val firstPersonnel = receivedList[0]
+        var titleOne = firstPersonnel.title
+        var nameOne = firstPersonnel.firstName + " " + firstPersonnel.lastName
+        val secondPersonnel = receivedList[1]
+        var titleTwo = secondPersonnel.title
+        var nameTwo = secondPersonnel.firstName + " " + secondPersonnel.lastName
+        val thirdPersonnel = receivedList[2]
+        var titleThree = thirdPersonnel.title
+        var nameThree = thirdPersonnel.firstName + " " + thirdPersonnel.lastName
+
+        if (nameTwo.length < nameOne.length) {
+            val tempName = nameOne
+            val tempTitle = titleOne
+            nameOne = nameTwo
+            titleOne = titleTwo
+            nameTwo = tempName
+            titleTwo = tempTitle
+        }
+        if (nameThree.length < nameOne.length) {
+            val tempName = nameOne
+            val tempTitle = titleOne
+            nameOne = nameThree
+            titleOne = titleThree
+            nameThree = tempName
+            titleThree = tempTitle
+        }
+        else if (nameThree.length < nameTwo.length) {
+            val tempName = nameTwo
+            val tempTitle = titleTwo
+            nameTwo = nameThree
+            titleTwo = titleThree
+            nameThree = tempName
+            titleThree = tempTitle
+        }
+
+        val textTitle = Paint().apply {
+            textSize = 15f
+            color = Color.BLACK
+        }
+        val textName = Paint().apply {
+            textSize = 25f
+            color = Color.BLACK
+        }
+        var textWidth = textName.measureText(nameOne)
+        var x = canvas.width / 2f - textWidth / 2f
+        canvas.drawText(titleOne, x, 105f, textTitle)
+        canvas.drawText(nameOne, x, 130f, textName)
+
+        textWidth = textName.measureText(nameTwo)
+        x = canvas.width / 2f - textWidth / 2f
+        canvas.drawText(titleTwo, x, 165f, textTitle)
+        canvas.drawText(nameTwo, x, 190f, textName)
+
+        textWidth = textName.measureText(nameThree)
+        x = canvas.width / 2f - textWidth / 2f
+        canvas.drawText(titleThree, x, 225f, textTitle)
+        canvas.drawText(nameThree, x, 250f, textName)
+
+        return canvas
     }
 
     private fun addTwoPersonnel(receivedList: ArrayList<Personnel>, canvas: Canvas): Canvas {

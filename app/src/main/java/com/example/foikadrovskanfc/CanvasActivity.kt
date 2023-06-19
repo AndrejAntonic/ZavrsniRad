@@ -32,10 +32,8 @@ class CanvasActivity : AppCompatActivity() {
         imageView = findViewById(R.id.imgw_generatedImage)
         val logoDrawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.foilogo75x65)
         val receivedList = intent.getSerializableExtra("personnelList") as ArrayList<Personnel>
-        val firstPersonnel = receivedList.firstOrNull()
-        val title = firstPersonnel?.title ?: ""
 
-        val originalImageBitmap = createImageBitmap(width, height, logoDrawable, title)
+        val originalImageBitmap = createImageBitmap(width, height, logoDrawable, receivedList)
         val scaledImageBitmap = Bitmap.createScaledBitmap(originalImageBitmap, 100, 75, false)
         imageView.setImageBitmap(originalImageBitmap)
 
@@ -52,9 +50,9 @@ class CanvasActivity : AppCompatActivity() {
     }
 
 
-    private fun createImageBitmap(width: Int, height: Int, logoDrawable: Drawable?, text: String): Bitmap{
+    private fun createImageBitmap(width: Int, height: Int, logoDrawable: Drawable?, receivedList: ArrayList<Personnel>): Bitmap{
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
+        var canvas = Canvas(bitmap)
 
         logoDrawable?.let {
             val logoWidth = width / 5
@@ -71,15 +69,32 @@ class CanvasActivity : AppCompatActivity() {
             canvas.drawBitmap(logoBitmap, logoLeft.toFloat(), logoTop.toFloat(), null)
         }
 
-        val textPaint = Paint().apply {
+        when(receivedList.size) {
+            1 -> canvas = addOnePersonnel(receivedList, canvas)
+        }
+
+        return bitmap
+    }
+
+    private fun addOnePersonnel(receivedList: ArrayList<Personnel>, canvas: Canvas): Canvas {
+        val firstPersonnel = receivedList.firstOrNull()
+        val title = firstPersonnel?.title ?: ""
+        val name = firstPersonnel?.firstName + " " + firstPersonnel?.lastName
+
+        val textTitle = Paint().apply {
             textSize = 20f
             color = Color.BLACK
         }
-        val textLeft = 10f
-        val textTop = logoDrawable?.intrinsicHeight ?: (0 + 20f)
-        canvas.drawText(text, textLeft, textTop.toFloat(), textPaint)
+        val textName = Paint().apply {
+            textSize = 35f
+            color = Color.BLACK
+        }
+        val textWidth = textName.measureText(name)
+        val x = canvas.width / 2f - textWidth / 2f
+        canvas.drawText(title, x, 140f, textTitle)
+        canvas.drawText(name, x, 180f, textName)
 
-        return bitmap
+        return canvas
     }
 
     private fun convertBitmapToByteArray(bitmap: Bitmap): ByteArray {

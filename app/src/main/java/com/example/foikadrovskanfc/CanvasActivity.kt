@@ -73,9 +73,66 @@ class CanvasActivity : AppCompatActivity() {
             1 -> canvas = addOnePersonnel(receivedList, canvas)
             2 -> canvas = addTwoPersonnel(receivedList, canvas)
             3 -> canvas = addThreePersonnel(receivedList, canvas)
+            4 -> canvas = addFourPersonnel(receivedList, canvas)
         }
 
         return bitmap
+    }
+
+    private fun addFourPersonnel(receivedList: ArrayList<Personnel>, canvas: Canvas): Canvas {
+        val firstPersonnel = receivedList[0]
+        var titleOne = firstPersonnel.title
+        var nameOne = firstPersonnel.firstName + " " + firstPersonnel.lastName
+        val secondPersonnel = receivedList[1]
+        var titleTwo = secondPersonnel.title
+        var nameTwo = secondPersonnel.firstName + " " + secondPersonnel.lastName
+        val thirdPersonnel = receivedList[2]
+        var titleThree = thirdPersonnel.title
+        var nameThree = thirdPersonnel.firstName + " " + thirdPersonnel.lastName
+        val fourthPersonnel = receivedList[3]
+        var titleFour = fourthPersonnel.title
+        var nameFour = fourthPersonnel.firstName + " " + fourthPersonnel.lastName
+
+        if (nameTwo.length < nameOne.length) {
+            val tempName = nameOne
+            val tempTitle = titleOne
+            nameOne = nameTwo
+            titleOne = titleTwo
+            nameTwo = tempName
+            titleTwo = tempTitle
+        }
+        if (nameFour.length < nameThree.length) {
+            val tempName = nameThree
+            val tempTitle = titleFour
+            nameThree = nameFour
+            titleThree = titleFour
+            nameFour = tempName
+            titleFour = tempTitle
+        }
+        val textTitle = Paint().apply {
+            textSize = 15f
+            color = Color.BLACK
+        }
+        val textName = Paint().apply {
+            textSize = 20f
+            color = Color.BLACK
+        }
+        var firstHalfTextWidth = textName.measureText(nameTwo)
+        var firstHalfx = canvas.width / 4f - firstHalfTextWidth / 2f
+        canvas.drawText(titleOne, firstHalfx, 115f, textTitle)
+        canvas.drawText(nameOne, firstHalfx, 140f, textName)
+        canvas.drawText(titleTwo, firstHalfx, 180f, textTitle)
+        canvas.drawText(nameTwo, firstHalfx, 215f, textName)
+
+        var secondHalfTextWidth = textName.measureText(nameFour)
+        var secondHalfx = canvas.width * 3f / 4f - secondHalfTextWidth / 2f
+        canvas.drawText(titleThree, secondHalfx, 115f, textTitle)
+        canvas.drawText(nameThree, secondHalfx, 140f, textName)
+        canvas.drawText(titleFour, secondHalfx, 180f, textTitle)
+        canvas.drawText(nameFour, secondHalfx, 215f, textName)
+
+
+        return canvas
     }
 
     private fun addThreePersonnel(receivedList: java.util.ArrayList<Personnel>, canvas: Canvas): Canvas {

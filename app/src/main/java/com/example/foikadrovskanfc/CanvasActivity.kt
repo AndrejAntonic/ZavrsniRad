@@ -71,15 +71,55 @@ class CanvasActivity : AppCompatActivity() {
 
         when(receivedList.size) {
             1 -> canvas = addOnePersonnel(receivedList, canvas)
+            2 -> canvas = addTwoPersonnel(receivedList, canvas)
+            //3 -> canvas = addThreePersonnel(receivedList, canvas)
         }
 
         return bitmap
     }
 
+    private fun addTwoPersonnel(receivedList: ArrayList<Personnel>, canvas: Canvas): Canvas {
+        val firstPersonnel = receivedList[0]
+        var titleOne = firstPersonnel.title
+        var nameOne = firstPersonnel.firstName + " " + firstPersonnel.lastName
+        val secondPersonnel = receivedList[1]
+        var titleTwo = secondPersonnel.title
+        var nameTwo = secondPersonnel.firstName + " " + secondPersonnel.lastName
+
+        if (nameTwo.length < nameOne.length) {
+            val tempName = nameOne
+            val tempTitle = titleOne
+            nameOne = nameTwo
+            titleOne = titleTwo
+            nameTwo = tempName
+            titleTwo = tempTitle
+        }
+
+        val textTitle = Paint().apply {
+            textSize = 15f
+            color = Color.BLACK
+        }
+        val textName = Paint().apply {
+            textSize = 25f
+            color = Color.BLACK
+        }
+        var textWidth = textName.measureText(nameOne)
+        var x = canvas.width / 2f - textWidth / 2f
+        canvas.drawText(titleOne, x, 110f, textTitle)
+        canvas.drawText(nameOne, x, 140f, textName)
+
+        textWidth = textName.measureText(nameTwo)
+        x = canvas.width / 2f - textWidth / 2f
+        canvas.drawText(titleTwo, x, 190f, textTitle)
+        canvas.drawText(nameTwo, x, 220f, textName)
+
+        return canvas
+    }
+
     private fun addOnePersonnel(receivedList: ArrayList<Personnel>, canvas: Canvas): Canvas {
-        val firstPersonnel = receivedList.firstOrNull()
-        val title = firstPersonnel?.title ?: ""
-        val name = firstPersonnel?.firstName + " " + firstPersonnel?.lastName
+        val firstPersonnel = receivedList[0]
+        val title = firstPersonnel.title
+        val name = firstPersonnel.firstName + " " + firstPersonnel.lastName
 
         val textTitle = Paint().apply {
             textSize = 20f
@@ -91,6 +131,7 @@ class CanvasActivity : AppCompatActivity() {
         }
         val textWidth = textName.measureText(name)
         val x = canvas.width / 2f - textWidth / 2f
+
         canvas.drawText(title, x, 140f, textTitle)
         canvas.drawText(name, x, 180f, textName)
 

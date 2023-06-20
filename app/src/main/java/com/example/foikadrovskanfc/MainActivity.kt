@@ -7,24 +7,42 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.MenuItem
 import android.view.Window
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foikadrovskanfc.adapters.PersonnelAdapter
 import com.example.foikadrovskanfc.helpers.MockDataLoader
 import com.example.foikadrovskanfc.utils.NfcUtils
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var fabPersonnel: FloatingActionButton
     private val adapter = PersonnelAdapter(MockDataLoader.getDemoData())
+    private lateinit var drawerLayout: DrawerLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        drawerLayout = findViewById(R.id.drawerLayout_main)
+        var toolbar = findViewById<Toolbar>(R.id.tb_mainActivity)
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = ""
+        val navigationView = findViewById<NavigationView>(R.id.navigationView_main)
+        navigationView.setNavigationItemSelectedListener(this)
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        //TODO: Poboljsati kod za navigaciju i dodati kod za odabiranje opcije u navigaciji.
 
         checkNfcCapability()
 
@@ -109,6 +127,10 @@ class MainActivity : ComponentActivity() {
         }
 
         dialog.show()
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        TODO("Not yet implemented")
     }
 }
 

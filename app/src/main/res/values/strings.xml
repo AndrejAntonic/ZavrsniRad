@@ -6,4 +6,7 @@
     <string name="enable">Enable</string>
     <string name="generateImage">Generate image</string>
     <string name="send">Send</string>
+    <string name="refresh">Refresh</string>
+    <string name="open_nav">Open</string>
+    <string name="close_nav">Close</string>
 </resources>

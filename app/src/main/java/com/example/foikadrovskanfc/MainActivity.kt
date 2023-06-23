@@ -1,6 +1,7 @@
 package com.example.foikadrovskanfc
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -9,12 +10,14 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.MenuItem
 import android.view.Window
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +35,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val window = window
+        val statusBarColor = ContextCompat.getColor(this, R.color.red)
+        changeStatusBarColor(window, statusBarColor)
 
         drawerLayout = findViewById(R.id.drawerLayout_main)
         var toolbar = findViewById<Toolbar>(R.id.tb_mainActivity)
@@ -70,6 +77,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    private fun changeStatusBarColor(window: Window, color: Int){
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = color
+    }
     private fun checkNfcCapability() {
         val nfcUtils = NfcUtils(this)
         val hasNfcCapability = nfcUtils.hasNfcCapability()

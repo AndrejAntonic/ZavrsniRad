@@ -49,6 +49,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
+        android:fitsSystemWindows="false"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/navigationView_main"

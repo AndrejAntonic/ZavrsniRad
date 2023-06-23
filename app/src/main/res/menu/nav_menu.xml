@@ -4,12 +4,21 @@
     tools:showIn = "navigation_view">
 
     <group
+        android:id="@+id/menuRefresh"
         android:checkableBehavior="single">
-
         <item
             android:id="@+id/refresh"
             android:icon="@drawable/baseline_refresh_24_black"
             android:title="@string/refresh"/>
+    </group>
+
+    <group
+        android:id="@+id/menuInfo"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/info"
+            android:icon="@drawable/baseline_info_24"
+            android:title="@string/info"/>
     </group>
 
 </menu>

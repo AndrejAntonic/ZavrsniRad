@@ -18,6 +18,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -67,13 +68,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             else
                 Toast.makeText(this, "Please select an employee first!", Toast.LENGTH_SHORT).show()
-            /*
-            val checkedTags = adapter.getSelectedItems()
-            var message = ""
-            for (tag in checkedTags)
-                message += tag.id
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-             */
         }
     }
 
@@ -81,6 +75,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = color
     }
+
     private fun checkNfcCapability() {
         val nfcUtils = NfcUtils(this)
         val hasNfcCapability = nfcUtils.hasNfcCapability()
@@ -141,48 +136,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        TODO("Not yet implemented")
-    }
-}
-
-
-/*
-Generirano sa projektom
-
-Ovisnosti
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.foikadrovskanfc.ui.theme.FOIKadrovskaNFCTheme
-
-U oncreate
-setContent {
-            FOIKadrovskaNFCTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Greeting("Android")
-                }
-            }
+        when(item.itemId){
+            R.id.refresh -> Toast.makeText(this, "Button pressed", Toast.LENGTH_SHORT).show()
         }
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-            text = "Hello $name!",
-            modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FOIKadrovskaNFCTheme {
-        Greeting("Android")
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 }
- */

@@ -18,9 +18,10 @@
 
         <CheckBox
             android:id="@+id/chb_personnelId"
-            android:gravity="center_vertical"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:clickable="false"
+            android:gravity="center_vertical" />
 
         <LinearLayout
             android:layout_width="wrap_content"

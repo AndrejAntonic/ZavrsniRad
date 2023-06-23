@@ -163,7 +163,7 @@ class CanvasActivity : AppCompatActivity() {
             nameThree = tempName
             titleThree = tempTitle
         }
-        else if (nameThree.length < nameTwo.length) {
+        if (nameThree.length < nameTwo.length) {
             val tempName = nameTwo
             val tempTitle = titleTwo
             nameTwo = nameThree

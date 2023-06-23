@@ -11,17 +11,18 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiService {
-    val BASE_URL = "https://kadrovska.foi.hr/foi-api/public/"
-    val responseHandler = ResponseHandler()
+    private const val BASE_URL = "https://kadrovska.foi.hr/foi-api/public/"
+
+    private val retrofit = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl(BASE_URL)
+        .build()
+
+    private val apiInterface: ApiInterface = retrofit.create(ApiInterface::class.java)
+    private val responseHandler = ResponseHandler()
 
     fun getPersonnelData(callback: (MutableList<Personnel>) -> Unit) {
-        val retrofitBuilder = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(BASE_URL)
-            .build()
-            .create(ApiInterface::class.java)
-
-        val retrofitData = retrofitBuilder.getAllPersonnelData()
+        val retrofitData = apiInterface.getAllPersonnelData()
 
         retrofitData.enqueue(object : Callback<UserResponse?> {
             override fun onResponse(call: Call<UserResponse?>, response: Response<UserResponse?>) {
@@ -33,7 +34,7 @@ object ApiService {
             }
 
             override fun onFailure(call: Call<UserResponse?>, t: Throwable) {
-                Log.d("Proba2", "onFailure" + t.message)
+                Log.d("Data fetching failure", "Failure while fetching API data: " + t.message)
             }
         })
     }

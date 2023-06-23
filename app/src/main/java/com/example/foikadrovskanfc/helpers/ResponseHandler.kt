@@ -1,30 +1,15 @@
 package com.example.foikadrovskanfc.helpers
 
-import androidx.compose.ui.text.capitalize
 import com.example.foikadrovskanfc.entities.Personnel
 import com.example.foikadrovskanfc.entities.UserResponse
 
 class ResponseHandler {
 
     fun convertResponseToPersonnelList(responseBody: UserResponse): MutableList<Personnel> {
-        val personnelList: MutableList<Personnel> = mutableListOf()
-        var title: String
-        var lastIndex: Int
+        val personnelList = mutableListOf<Personnel>()
+
         for (personnel in responseBody.member) {
-            val containsComma = personnel.nameWithTitleHr.contains(",")
-            if(containsComma) {
-                lastIndex = personnel.nameWithTitleHr.lastIndexOf(',')
-                title = personnel.nameWithTitleHr.substring(lastIndex + 1)
-                title = title.removePrefix(" ")
-                title = title.replaceFirstChar { it.uppercase() }
-            }
-            else{
-                lastIndex = personnel.nameWithTitleHr.lastIndexOf('.')
-                title = if(lastIndex != -1)
-                        personnel.nameWithTitleHr.substring(0, lastIndex) + "."
-                    else
-                        ""
-            }
+            val title = extractTitle(personnel.nameWithTitleHr)
             val personnelToAdd = Personnel(personnel.id, title, personnel.firstName, personnel.lastName)
             personnelList.add(personnelToAdd)
         }
@@ -32,4 +17,16 @@ class ResponseHandler {
         return personnelList
     }
 
+    private fun extractTitle(nameWithTitleHr: String): String {
+        val containsComma = nameWithTitleHr.contains(",")
+        return if (containsComma) {
+            val lastIndex = nameWithTitleHr.lastIndexOf(',')
+            val title = nameWithTitleHr.substring(lastIndex + 1).trim().replaceFirstChar { it.uppercase() }
+            title
+        } else {
+            val lastIndex = nameWithTitleHr.lastIndexOf('.')
+            val title = if (lastIndex != -1) nameWithTitleHr.substring(0, lastIndex) + "." else ""
+            title
+        }
+    }
 }

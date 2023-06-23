@@ -12,28 +12,24 @@ import com.example.foikadrovskanfc.entities.Personnel
 
 class PersonnelAdapter(private var personnelList: List<Personnel>) :
     RecyclerView.Adapter<PersonnelAdapter.PersonnelViewHolder>() {
+
     private val selectedItems: MutableList<Personnel> = mutableListOf()
+
     inner class PersonnelViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val personnelCard: CardView
-        private val personnelId: CheckBox
-        private val personnelTitle: TextView
-        private val personnelFirstName: TextView
-        private val personnelLastName: TextView
+        private val personnelCard: CardView = view.findViewById(R.id.cw_personnelCard)
+        private val personnelId: CheckBox = view.findViewById(R.id.chb_personnelId)
+        private val personnelTitle: TextView = view.findViewById(R.id.tw_personnelTitle)
+        private val personnelFirstName: TextView = view.findViewById(R.id.tw_personnelFirstName)
+        private val personnelLastName: TextView = view.findViewById(R.id.tw_personnelLastName)
 
         init {
-            personnelCard = view.findViewById(R.id.cw_personnelCard)
-            personnelId = view.findViewById(R.id.chb_personnelId)
-            personnelTitle = view.findViewById(R.id.tw_personnelTitle)
-            personnelFirstName = view.findViewById(R.id.tw_personnelFirstName)
-            personnelLastName = view.findViewById(R.id.tw_personnelLastName)
-
             personnelCard.setOnClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val personnel = personnelList[position]
                     val isChecked = !personnelId.isChecked
 
-                    if(selectedItems.size != 4 || !isChecked){
+                    if (selectedItems.size != 4 || !isChecked) {
                         personnelId.isChecked = isChecked
                         if (isChecked) {
                             selectedItems.add(personnel)
@@ -54,8 +50,7 @@ class PersonnelAdapter(private var personnelList: List<Personnel>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonnelViewHolder {
-        val personnelView = LayoutInflater
-            .from(parent.context)
+        val personnelView = LayoutInflater.from(parent.context)
             .inflate(R.layout.personnel_records_item, parent, false)
         return PersonnelViewHolder(personnelView)
     }
@@ -70,7 +65,7 @@ class PersonnelAdapter(private var personnelList: List<Personnel>) :
         return selectedItems.toList()
     }
 
-    fun updateData(newData: MutableList<Personnel>) {
+    fun updateData(newData: List<Personnel>) {
         personnelList = newData
         notifyDataSetChanged()
     }

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.foikadrovskanfc.R
 import com.example.foikadrovskanfc.entities.Personnel
 
-class PersonnelAdapter(private val personnelList: List<Personnel>) :
+class PersonnelAdapter(private var personnelList: List<Personnel>) :
     RecyclerView.Adapter<PersonnelAdapter.PersonnelViewHolder>() {
     private val selectedItems: MutableList<Personnel> = mutableListOf()
     inner class PersonnelViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -43,8 +43,6 @@ class PersonnelAdapter(private val personnelList: List<Personnel>) :
                     }
                 }
             }
-
-            // TODO: Dodati provjeru za checkbox kao sto je gore za karticu
         }
 
         fun bind(personnel: Personnel) {
@@ -70,5 +68,10 @@ class PersonnelAdapter(private val personnelList: List<Personnel>) :
 
     fun getSelectedItems(): List<Personnel> {
         return selectedItems.toList()
+    }
+
+    fun updateData(newData: MutableList<Personnel>) {
+        personnelList = newData
+        notifyDataSetChanged()
     }
 }

@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.MenuItem
 import android.view.Window
 import android.view.WindowManager
@@ -23,11 +24,19 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foikadrovskanfc.adapters.PersonnelAdapter
+import com.example.foikadrovskanfc.api.ApiInterface
+import com.example.foikadrovskanfc.api.ApiService
+import com.example.foikadrovskanfc.entities.UserResponse
 import com.example.foikadrovskanfc.helpers.MockDataLoader
 import com.example.foikadrovskanfc.utils.NfcUtils
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var fabPersonnel: FloatingActionButton
@@ -137,7 +146,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.refresh -> Toast.makeText(this, "Button pressed", Toast.LENGTH_SHORT).show()
+            R.id.refresh -> ApiService.getPersonnelData { personnelList ->
+                adapter.updateData(personnelList)
+                adapter.notifyDataSetChanged()
+            }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true

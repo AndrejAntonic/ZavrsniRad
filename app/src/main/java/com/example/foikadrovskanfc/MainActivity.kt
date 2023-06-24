@@ -15,6 +15,8 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -43,13 +45,13 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
+import java.security.AccessController.getContext
+
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var fabPersonnel: FloatingActionButton
     private lateinit var twEmpty: TextView
-    private lateinit var searchButton: ImageButton
-    private lateinit var closeButton: ImageButton
-    private lateinit var inputText: EditText
+    private lateinit var searchView: SearchView
     private val personnelList : MutableList<Personnel> = mutableListOf()
     private var adapter = PersonnelAdapter(personnelList)
     private lateinit var drawerLayout: DrawerLayout
@@ -90,29 +92,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             else
                 Toast.makeText(this, "Please select an employee first!", Toast.LENGTH_SHORT).show()
-        }
-
-        searchButton = findViewById(R.id.imgbtn_search)
-        closeButton = findViewById(R.id.imgbtn_close)
-        inputText = findViewById(R.id.etxt_search)
-        searchButton.setOnClickListener {
-            searchButton.isVisible = false
-            searchButton.isEnabled = false
-
-            closeButton.isVisible = true
-            closeButton.isEnabled = true
-            inputText.isVisible = true
-            inputText.isEnabled = true
-        }
-
-        closeButton.setOnClickListener {
-            closeButton.isVisible = false
-            closeButton.isEnabled = false
-            inputText.isVisible = false
-            inputText.isEnabled = false
-
-            searchButton.isVisible = true
-            searchButton.isEnabled = true
         }
     }
 

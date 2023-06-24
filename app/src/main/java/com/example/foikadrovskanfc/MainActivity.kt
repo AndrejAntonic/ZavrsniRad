@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var searchView: SearchView
     private lateinit var adapter: PersonnelAdapter
     private lateinit var drawerLayout: DrawerLayout
+    private val checkedItems: MutableList<Personnel> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -87,10 +88,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         fabPersonnel = findViewById(R.id.fab_generateImage)
         fabPersonnel.setOnClickListener{
-            val checkedTags = adapter.getSelectedItems()
-            if(checkedTags.isNotEmpty()) {
+            checkedItems.addAll(adapter.getSelectedItems())
+            checkedItems.removeAll(adapter.getRemovedItems())
+            if(checkedItems.isNotEmpty()) {
                 val intent = Intent(this, CanvasActivity::class.java)
-                intent.putExtra("personnelList", ArrayList(checkedTags))
+                intent.putExtra("personnelList", ArrayList(checkedItems))
                 startActivity(intent)
             }
             else
@@ -120,6 +122,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             filteredList.add(personnel)
                     }
                 }
+
                 refreshPersonnelList(filteredList)
                 return true
             }
@@ -201,14 +204,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun refreshPersonnelList(personnelList: MutableList<Personnel>) {
+        checkedItems.addAll(adapter.getSelectedItems())
+        checkedItems.removeAll(adapter.getRemovedItems())
+        Log.d("Checked items", checkedItems.toString())
+        Log.d("Checked tags", adapter.getSelectedItems().toString())
         if(personnelList.isNotEmpty())
             twEmpty.text = ""
-        adapter = PersonnelAdapter(personnelList)
+        adapter = PersonnelAdapter(personnelList, checkedItems)
         recyclerView.adapter = adapter
     }
 
     private fun loadPersonnelList() {
-        var personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
+        val personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
         if (personnelList.isNotEmpty())
             twEmpty.text = ""
         adapter = PersonnelAdapter(personnelList.toMutableList())

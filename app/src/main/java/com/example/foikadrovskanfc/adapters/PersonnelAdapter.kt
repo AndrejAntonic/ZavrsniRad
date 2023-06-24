@@ -10,10 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.foikadrovskanfc.R
 import com.example.foikadrovskanfc.entities.Personnel
 
-class PersonnelAdapter(private var personnelList: List<Personnel>) :
+class PersonnelAdapter(private var personnelList: List<Personnel>, private var checkedTags: MutableList<Personnel> = mutableListOf()) :
     RecyclerView.Adapter<PersonnelAdapter.PersonnelViewHolder>() {
 
     private val selectedItems: MutableList<Personnel> = mutableListOf()
+    private val removedItems: MutableList<Personnel> = mutableListOf()
 
     inner class PersonnelViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val personnelCard: CardView = view.findViewById(R.id.cw_personnelCard)
@@ -33,8 +34,11 @@ class PersonnelAdapter(private var personnelList: List<Personnel>) :
                         personnelId.isChecked = isChecked
                         if (isChecked) {
                             selectedItems.add(personnel)
+                            if(removedItems.contains(personnel))
+                                removedItems.remove(personnel)
                         } else {
                             selectedItems.remove(personnel)
+                            removedItems.add(personnel)
                         }
                     }
                 }
@@ -42,6 +46,7 @@ class PersonnelAdapter(private var personnelList: List<Personnel>) :
         }
 
         fun bind(personnel: Personnel) {
+            personnelId.isChecked = checkedTags.contains(personnel)
             personnelId.tag = personnel.id
             personnelTitle.text = personnel.title
             personnelFirstName.text = personnel.firstName
@@ -61,8 +66,12 @@ class PersonnelAdapter(private var personnelList: List<Personnel>) :
         holder.bind(personnelList[position])
     }
 
-    fun getSelectedItems(): List<Personnel> {
-        return selectedItems.toList()
+    fun getSelectedItems(): MutableList<Personnel> {
+        return selectedItems.toMutableList()
+    }
+
+    fun getRemovedItems(): MutableList<Personnel> {
+        return removedItems.toMutableList()
     }
 
     fun updateData(newData: List<Personnel>) {

@@ -26,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.foikadrovskanfc.adapters.PersonnelAdapter
 import com.example.foikadrovskanfc.api.ApiInterface
 import com.example.foikadrovskanfc.api.ApiService
+import com.example.foikadrovskanfc.database.PersonnelDatabase
+import com.example.foikadrovskanfc.entities.Personnel
 import com.example.foikadrovskanfc.entities.UserResponse
 import com.example.foikadrovskanfc.helpers.MockDataLoader
 import com.example.foikadrovskanfc.utils.NfcUtils
@@ -40,11 +42,14 @@ import retrofit2.create
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var fabPersonnel: FloatingActionButton
-    private val adapter = PersonnelAdapter(MockDataLoader.getDemoData())
+    private val personnelList : MutableList<Personnel> = mutableListOf()
+    private var adapter = PersonnelAdapter(personnelList)
     private lateinit var drawerLayout: DrawerLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        PersonnelDatabase.buildInstance(applicationContext)
+        //PersonnelDatabase.getInstance().getPersonnelDAO().deleteAllPersonnel()
 
         val window = window
         val statusBarColor = ContextCompat.getColor(this, R.color.red)
@@ -59,12 +64,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
-        //TODO: Poboljsati kod za navigaciju i dodati kod za odabiranje opcije u navigaciji.
 
         checkNfcCapability()
 
         recyclerView = findViewById(R.id.rv_personnelRecords)
-        recyclerView.adapter = adapter
+        loadPersonnelList()
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         fabPersonnel = findViewById(R.id.fab_generateImage)
@@ -147,11 +151,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.refresh -> ApiService.getPersonnelData { personnelList ->
-                adapter.updateData(personnelList)
-                adapter.notifyDataSetChanged()
-            }
+                    refreshPersonnelList(personnelList)
+                }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun refreshPersonnelList(personnelList: MutableList<Personnel>) {
+        adapter.updateData(personnelList)
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun loadPersonnelList() {
+        val personnel = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel()
+        adapter = PersonnelAdapter(personnel.toMutableList())
+        recyclerView.adapter = adapter
     }
 }

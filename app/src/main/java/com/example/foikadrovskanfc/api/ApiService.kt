@@ -1,6 +1,7 @@
 package com.example.foikadrovskanfc.api
 
 import android.util.Log
+import com.example.foikadrovskanfc.database.PersonnelDatabase
 import com.example.foikadrovskanfc.entities.Personnel
 import com.example.foikadrovskanfc.entities.UserResponse
 import com.example.foikadrovskanfc.helpers.ResponseHandler
@@ -29,6 +30,7 @@ object ApiService {
                 val responseBody = response.body()
                 if (responseBody != null) {
                     val personnelList = responseHandler.convertResponseToPersonnelList(responseBody)
+                    PersonnelDatabase.getInstance().getPersonnelDAO().insertPersonnel(personnelList)
                     callback(personnelList)
                 }
             }
@@ -37,5 +39,9 @@ object ApiService {
                 Log.d("Data fetching failure", "Failure while fetching API data: " + t.message)
             }
         })
+    }
+
+    private fun insertPersonnelIntoDatabase(personnelList: MutableList<Personnel>) {
+        PersonnelDatabase.getInstance().getPersonnelDAO().insertPersonnel(personnelList)
     }
 }

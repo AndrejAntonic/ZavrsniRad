@@ -23,6 +23,7 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.ui.text.toLowerCase
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
@@ -46,14 +47,14 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import java.security.AccessController.getContext
+import java.util.Locale
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var fabPersonnel: FloatingActionButton
     private lateinit var twEmpty: TextView
     private lateinit var searchView: SearchView
-    private val personnelList : MutableList<Personnel> = mutableListOf()
-    private var adapter = PersonnelAdapter(personnelList)
+    private lateinit var adapter: PersonnelAdapter
     private lateinit var drawerLayout: DrawerLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,6 +94,34 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             else
                 Toast.makeText(this, "Please select an employee first!", Toast.LENGTH_SHORT).show()
         }
+
+        searchView = findViewById(R.id.searchView)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                val copyList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
+                val filteredList = mutableListOf<Personnel>()
+                if(newText.isEmpty()) {
+                    filteredList.addAll(copyList)
+                }
+                else {
+                    val query = newText.lowercase()
+                    for(personnel in copyList) {
+                        val fullName = personnel.firstName + " " + personnel.lastName
+                        if (personnel.firstName.lowercase().contains(query) ||
+                            personnel.lastName.lowercase().contains(query) ||
+                            personnel.title.lowercase().contains(query) ||
+                            fullName.lowercase().contains(query))
+                            filteredList.add(personnel)
+                    }
+                }
+                refreshPersonnelList(filteredList)
+                return true
+            }
+        })
     }
 
     private fun changeStatusBarColor(window: Window, color: Int){
@@ -172,15 +201,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun refreshPersonnelList(personnelList: MutableList<Personnel>) {
         if(personnelList.isNotEmpty())
             twEmpty.text = ""
-        adapter.updateData(personnelList)
-        adapter.notifyDataSetChanged()
+        adapter = PersonnelAdapter(personnelList)
+        recyclerView.adapter = adapter
     }
 
     private fun loadPersonnelList() {
-        val personnel = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel()
-        if (personnel.isNotEmpty())
+        var personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
+        if (personnelList.isNotEmpty())
             twEmpty.text = ""
-        adapter = PersonnelAdapter(personnel.toMutableList())
+        adapter = PersonnelAdapter(personnelList.toMutableList())
         recyclerView.adapter = adapter
     }
 }

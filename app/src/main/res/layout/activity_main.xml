@@ -37,6 +37,20 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <TextView
+            android:id="@+id/tw_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/empty_rw"
+            android:textColor="@color/grey"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:padding="10dp"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_personnelRecords"
             android:layout_width="match_parent"

@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -42,6 +43,7 @@ import retrofit2.create
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var fabPersonnel: FloatingActionButton
+    private lateinit var twEmpty: TextView
     private val personnelList : MutableList<Personnel> = mutableListOf()
     private var adapter = PersonnelAdapter(personnelList)
     private lateinit var drawerLayout: DrawerLayout
@@ -49,7 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         PersonnelDatabase.buildInstance(applicationContext)
-        //PersonnelDatabase.getInstance().getPersonnelDAO().deleteAllPersonnel()
+        PersonnelDatabase.getInstance().getPersonnelDAO().deleteAllPersonnel()
 
         val window = window
         val statusBarColor = ContextCompat.getColor(this, R.color.red)
@@ -67,6 +69,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         checkNfcCapability()
 
+        twEmpty = findViewById(R.id.tw_empty)
         recyclerView = findViewById(R.id.rv_personnelRecords)
         loadPersonnelList()
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -159,12 +162,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun refreshPersonnelList(personnelList: MutableList<Personnel>) {
+        if(personnelList.isNotEmpty())
+            twEmpty.text = ""
         adapter.updateData(personnelList)
         adapter.notifyDataSetChanged()
     }
 
     private fun loadPersonnelList() {
         val personnel = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel()
+        if (personnel.isNotEmpty())
+            twEmpty.text = ""
         adapter = PersonnelAdapter(personnel.toMutableList())
         recyclerView.adapter = adapter
     }

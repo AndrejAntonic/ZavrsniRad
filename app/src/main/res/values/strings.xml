@@ -11,4 +11,5 @@
     <string name="close_nav">Close</string>
     <string name="FOI">Fakultet Organizacije i Informatike</string>
     <string name="info">Info</string>
+    <string name="empty_rw">To show data please click the refresh button in the navigation bar.</string>
 </resources>

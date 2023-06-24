@@ -53,6 +53,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var recyclerView: RecyclerView
     private lateinit var fabPersonnel: FloatingActionButton
     private lateinit var twEmpty: TextView
+    private lateinit var filterOn: ImageButton
+    private lateinit var filterOff: ImageButton
     private lateinit var searchView: SearchView
     private lateinit var adapter: PersonnelAdapter
     private lateinit var drawerLayout: DrawerLayout

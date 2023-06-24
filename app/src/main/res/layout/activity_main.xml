@@ -74,6 +74,24 @@
             android:gravity="center"
             android:padding="10dp"/>
 
+        <ImageButton
+            android:id="@+id/imgbtn_filterOff"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/baseline_filter_alt_off_24"
+            app:layout_constraintTop_toBottomOf="@+id/tb_mainActivity"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@android:color/transparent"/>
+
+        <ImageButton
+            android:id="@+id/imgbtn_filter"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/baseline_filter_alt_24"
+            app:layout_constraintTop_toBottomOf="@+id/tb_mainActivity"
+            app:layout_constraintEnd_toStartOf="@id/imgbtn_filterOff"
+            android:background="@android:color/transparent"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_personnelRecords"
             android:layout_width="match_parent"
@@ -82,7 +100,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tb_mainActivity"/>
+            app:layout_constraintTop_toBottomOf="@+id/imgbtn_filterOff"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView

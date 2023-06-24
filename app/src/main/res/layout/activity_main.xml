@@ -26,6 +26,41 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
+        <ImageButton
+            android:id="@+id/imgbtn_search"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/baseline_search_24"
+            android:background="@android:color/transparent"
+            android:paddingEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/tb_mainActivity"/>
+
+        <ImageButton
+            android:id="@+id/imgbtn_close"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/baseline_close_24"
+            android:background="@android:color/transparent"
+            android:paddingEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/tb_mainActivity"
+            android:visibility="invisible"
+            android:enabled="false"/>
+
+        <EditText
+            android:id="@+id/etxt_search"
+            android:layout_width="275dp"
+            android:layout_height="45dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/tb_mainActivity"
+            android:visibility="invisible"
+            android:enabled="false"/>
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_generateImage"
             android:layout_width="wrap_content"

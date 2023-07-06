@@ -59,6 +59,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var twEmpty: TextView
     private lateinit var filterOn: ImageButton
     private lateinit var filterOff: ImageButton
+    private var selectedFilterOption: String = ""
+    private var selectedFilterType: String = ""
     private lateinit var searchView: SearchView
     private lateinit var adapter: PersonnelAdapter
     private lateinit var drawerLayout: DrawerLayout
@@ -67,7 +69,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         PersonnelDatabase.buildInstance(applicationContext)
-        PersonnelDatabase.getInstance().getPersonnelDAO().deleteAllPersonnel()
+        //PersonnelDatabase.getInstance().getPersonnelDAO().deleteAllPersonnel()
 
         val window = window
         val statusBarColor = ContextCompat.getColor(this, R.color.red)
@@ -138,6 +140,38 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
     }
 
+    private fun SortList() {
+        val personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
+        val sortedPersonnelList = when (selectedFilterOption) {
+            "Name" -> {
+                if (selectedFilterType == "Ascending") {
+                    personnelList.sortedBy { it.firstName }
+                } else {
+                    personnelList.sortedByDescending { it.firstName }
+                }
+            }
+            "Last name" -> {
+                if (selectedFilterType == "Ascending") {
+                    personnelList.sortedBy { it.lastName }
+                } else {
+                    personnelList.sortedByDescending { it.lastName }
+                }
+            }
+            "Title" -> {
+                if (selectedFilterType == "Ascending") {
+                    personnelList.sortedBy { it.title }
+                } else {
+                    personnelList.sortedByDescending { it.title }
+                }
+            }
+            else -> personnelList
+        }
+
+        adapter = PersonnelAdapter(sortedPersonnelList.toMutableList())
+        recyclerView.adapter = adapter
+        //TODO: Maybe add retention of checked items?
+    }
+
     private fun ShowDialog(){
         val newFilterView = LayoutInflater.from(this).inflate(R.layout.filter_options, null)
         val dialogHelper = NewFilterHelper(newFilterView)
@@ -146,7 +180,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .setView(newFilterView)
             .setTitle(R.string.filter)
             .setPositiveButton(R.string.ok) {_, _ ->
-
+                selectedFilterOption = dialogHelper.getSelectedSpinnerOption()
+                selectedFilterType = dialogHelper.getSelectedSpinnerType()
+                SortList()
             }.show()
 
         dialogHelper.populateSpinnerOptions()

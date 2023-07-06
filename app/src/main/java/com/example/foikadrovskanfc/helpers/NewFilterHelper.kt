@@ -22,4 +22,12 @@ class NewFilterHelper(private val view: View) {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         filterTypeSpinner.adapter = spinnerAdapter
     }
+
+    fun getSelectedSpinnerOption(): String {
+        return filterOptionsSpinner.selectedItem.toString()
+    }
+
+    fun getSelectedSpinnerType(): String {
+        return filterTypeSpinner.selectedItem.toString()
+    }
 }

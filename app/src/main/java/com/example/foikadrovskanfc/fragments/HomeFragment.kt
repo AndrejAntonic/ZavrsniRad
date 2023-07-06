@@ -1,60 +1,179 @@
 package com.example.foikadrovskanfc.fragments
 
+import android.app.Dialog
+import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.foikadrovskanfc.CanvasActivity
 import com.example.foikadrovskanfc.R
+import com.example.foikadrovskanfc.adapters.PersonnelAdapter
+import com.example.foikadrovskanfc.database.PersonnelDatabase
+import com.example.foikadrovskanfc.entities.Personnel
+import com.example.foikadrovskanfc.utils.NfcUtils
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import android.view.Window
+import android.graphics.Color
+import android.util.Log
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.SearchView
+import androidx.appcompat.app.AlertDialog
+import com.example.foikadrovskanfc.helpers.NewFilterHelper
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: PersonnelAdapter
+    private lateinit var twEmpty: TextView
+    private lateinit var fabPersonnel: FloatingActionButton
+    private val checkedItems: MutableList<Personnel> = mutableListOf()
+    private lateinit var filterOn: ImageButton
+    private lateinit var filterOff: ImageButton
+    private var selectedFilterOption: String = ""
+    private var selectedFilterType: String = ""
+    private lateinit var searchView: SearchView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        findViews(view)
+        PersonnelDatabase.buildInstance(requireContext().applicationContext)
+        loadPersonnelList()
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        fabPersonnel.setOnClickListener{
+            checkedItems.addAll(adapter.getSelectedItems())
+            checkedItems.removeAll(adapter.getRemovedItems())
+            if(checkedItems.isNotEmpty()) {
+                val intent = Intent(requireContext(), CanvasActivity::class.java)
+                intent.putExtra("personnelList", ArrayList(checkedItems))
+                startActivity(intent)
+            }
+            else
+                Toast.makeText(requireContext(), "Please select an employee first!", Toast.LENGTH_SHORT).show()
+        }
+
+        filterOn.setOnClickListener{
+            showDialog()
+        }
+        filterOff.setOnClickListener{
+            clearFilter()
+        }
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                val copyList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
+                val filteredList = mutableListOf<Personnel>()
+                if(newText.isEmpty()) {
+                    filteredList.addAll(copyList)
+                }
+                else {
+                    val query = newText.lowercase()
+                    for(personnel in copyList) {
+                        val fullName = personnel.firstName + " " + personnel.lastName
+                        if (personnel.firstName.lowercase().contains(query) ||
+                            personnel.lastName.lowercase().contains(query) ||
+                            personnel.title.lowercase().contains(query) ||
+                            fullName.lowercase().contains(query))
+                            filteredList.add(personnel)
+                    }
+                }
+
+                refreshPersonnelList(filteredList)
+                return true
+            }
+        })
+
+    }
+    private fun findViews(view: View) {
+        recyclerView = view.findViewById(R.id.rv_personnelRecords)
+        twEmpty = view.findViewById(R.id.tw_empty)
+        fabPersonnel = view.findViewById(R.id.fab_generateImage)
+        filterOn = view.findViewById(R.id.imgbtn_filter)
+        filterOff = view.findViewById(R.id.imgbtn_filterOff)
+        searchView = view.findViewById(R.id.searchView)
+    }
+    private fun clearFilter() {
+        val personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
+        adapter = PersonnelAdapter(personnelList.toMutableList())
+        recyclerView.adapter = adapter
+    }
+    private fun showDialog(){
+        val newFilterView = LayoutInflater.from(requireContext()).inflate(R.layout.filter_options, null)
+        val dialogHelper = NewFilterHelper(newFilterView)
+
+        AlertDialog.Builder(requireContext())
+            .setView(newFilterView)
+            .setTitle(R.string.filter)
+            .setPositiveButton(R.string.ok) {_, _ ->
+                selectedFilterOption = dialogHelper.getSelectedSpinnerOption()
+                selectedFilterType = dialogHelper.getSelectedSpinnerType()
+                sortList()
+            }.show()
+
+        dialogHelper.populateSpinnerOptions()
+        dialogHelper.populateSpinnerType()
+    }
+    private fun sortList() {
+        val personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
+        val sortedPersonnelList = when (selectedFilterOption) {
+            "Name" -> {
+                if (selectedFilterType == "Ascending") {
+                    personnelList.sortedBy { it.firstName }
+                } else {
+                    personnelList.sortedByDescending { it.firstName }
                 }
             }
+            "Last name" -> {
+                if (selectedFilterType == "Ascending") {
+                    personnelList.sortedBy { it.lastName }
+                } else {
+                    personnelList.sortedByDescending { it.lastName }
+                }
+            }
+            "Title" -> {
+                if (selectedFilterType == "Ascending") {
+                    personnelList.sortedBy { it.title }
+                } else {
+                    personnelList.sortedByDescending { it.title }
+                }
+            }
+            else -> personnelList
+        }
+
+        adapter = PersonnelAdapter(sortedPersonnelList.toMutableList())
+        recyclerView.adapter = adapter
+        //TODO: Maybe add retention of checked items?
+    }
+    private fun loadPersonnelList() {
+        val personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
+        if (personnelList.isNotEmpty())
+            twEmpty.text = ""
+        adapter = PersonnelAdapter(personnelList.toMutableList())
+        recyclerView.adapter = adapter
+    }
+    private fun refreshPersonnelList(personnelList: MutableList<Personnel>) {
+        checkedItems.addAll(adapter.getSelectedItems())
+        checkedItems.removeAll(adapter.getRemovedItems())
+        //TODO: Fix duplicates in checkedItems list, implement logic so the list takes max 4 items
+        Log.d("Checked items", checkedItems.toString())
+        Log.d("Checked tags", adapter.getSelectedItems().toString())
+        if(personnelList.isNotEmpty())
+            twEmpty.text = ""
+        adapter = PersonnelAdapter(personnelList, checkedItems)
+        recyclerView.adapter = adapter
     }
 }

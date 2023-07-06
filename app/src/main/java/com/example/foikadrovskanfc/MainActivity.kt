@@ -1,83 +1,37 @@
 package com.example.foikadrovskanfc
 
-import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.SearchView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.compose.material3.AlertDialog
-import androidx.compose.ui.text.toLowerCase
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
-import com.example.foikadrovskanfc.adapters.PersonnelAdapter
-import com.example.foikadrovskanfc.api.ApiInterface
-import com.example.foikadrovskanfc.api.ApiService
-import com.example.foikadrovskanfc.database.PersonnelDatabase
-import com.example.foikadrovskanfc.entities.Personnel
-import com.example.foikadrovskanfc.entities.UserResponse
 import com.example.foikadrovskanfc.fragments.HomeFragment
 import com.example.foikadrovskanfc.fragments.InfoFragment
 import com.example.foikadrovskanfc.fragments.SettingsFragment
-import com.example.foikadrovskanfc.helpers.MockDataLoader
-import com.example.foikadrovskanfc.helpers.NewFilterHelper
 import com.example.foikadrovskanfc.utils.NfcUtils
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
-import java.security.AccessController.getContext
-import java.util.Locale
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var fabPersonnel: FloatingActionButton
-    private lateinit var twEmpty: TextView
-    private lateinit var filterOn: ImageButton
-    private lateinit var filterOff: ImageButton
-    private var selectedFilterOption: String = ""
-    private var selectedFilterType: String = ""
-    private lateinit var searchView: SearchView
-    private lateinit var adapter: PersonnelAdapter
     private lateinit var drawerLayout: DrawerLayout
-
-
-    private val checkedItems: MutableList<Personnel> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        checkNfcCapability()
 
         drawerLayout = findViewById(R.id.drawerLayout_main)
         val toolbar = findViewById<Toolbar>(R.id.tb_mainActivity)
         setSupportActionBar(toolbar)
+        supportActionBar?.title = ""
 
         val navigationView = findViewById<NavigationView>(R.id.navigationView_main)
         navigationView.setNavigationItemSelectedListener(this)
@@ -85,91 +39,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+
+        val window = window
+        val statusBarColor = ContextCompat.getColor(this, R.color.red)
+        changeStatusBarColor(window, statusBarColor)
 
         if(savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, HomeFragment()).commit()
             navigationView.setCheckedItem(R.id.menuHome)
         }
-
-        /*
-        PersonnelDatabase.buildInstance(applicationContext)
-        //PersonnelDatabase.getInstance().getPersonnelDAO().deleteAllPersonnel()
-
-        val window = window
-        val statusBarColor = ContextCompat.getColor(this, R.color.red)
-        changeStatusBarColor(window, statusBarColor)
-
-        drawerLayout = findViewById(R.id.drawerLayout_main)
-        var toolbar = findViewById<Toolbar>(R.id.tb_mainActivity)
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = ""
-        val navigationView = findViewById<NavigationView>(R.id.navigationView_main)
-        navigationView.setNavigationItemSelectedListener(this)
-        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav)
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-
-        checkNfcCapability()
-
-        twEmpty = findViewById(R.id.tw_empty)
-        recyclerView = findViewById(R.id.rv_personnelRecords)
-        loadPersonnelList()
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        fabPersonnel = findViewById(R.id.fab_generateImage)
-        fabPersonnel.setOnClickListener{
-            checkedItems.addAll(adapter.getSelectedItems())
-            checkedItems.removeAll(adapter.getRemovedItems())
-            if(checkedItems.isNotEmpty()) {
-                val intent = Intent(this, CanvasActivity::class.java)
-                intent.putExtra("personnelList", ArrayList(checkedItems))
-                startActivity(intent)
-            }
-            else
-                Toast.makeText(this, "Please select an employee first!", Toast.LENGTH_SHORT).show()
-        }
-
-        filterOn = findViewById(R.id.imgbtn_filter)
-        filterOn.setOnClickListener{
-            ShowDialog()
-        }
-
-        filterOff = findViewById(R.id.imgbtn_filterOff)
-        filterOff.setOnClickListener{
-            ClearFilter()
-        }
-
-        searchView = findViewById(R.id.searchView)
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                val copyList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
-                val filteredList = mutableListOf<Personnel>()
-                if(newText.isEmpty()) {
-                    filteredList.addAll(copyList)
-                }
-                else {
-                    val query = newText.lowercase()
-                    for(personnel in copyList) {
-                        val fullName = personnel.firstName + " " + personnel.lastName
-                        if (personnel.firstName.lowercase().contains(query) ||
-                            personnel.lastName.lowercase().contains(query) ||
-                            personnel.title.lowercase().contains(query) ||
-                            fullName.lowercase().contains(query))
-                            filteredList.add(personnel)
-                    }
-                }
-
-                refreshPersonnelList(filteredList)
-                return true
-            }
-        })
-
-         */
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -184,74 +63,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
-
     override fun onBackPressed() {
         if(drawerLayout.isDrawerOpen(GravityCompat.START))
             drawerLayout.closeDrawer(GravityCompat.START)
         else
             onBackPressedDispatcher.onBackPressed()
     }
-/*
-    private fun ClearFilter() {
-        val personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
-        adapter = PersonnelAdapter(personnelList.toMutableList())
-        recyclerView.adapter = adapter
-    }
-
-    private fun SortList() {
-        val personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
-        val sortedPersonnelList = when (selectedFilterOption) {
-            "Name" -> {
-                if (selectedFilterType == "Ascending") {
-                    personnelList.sortedBy { it.firstName }
-                } else {
-                    personnelList.sortedByDescending { it.firstName }
-                }
-            }
-            "Last name" -> {
-                if (selectedFilterType == "Ascending") {
-                    personnelList.sortedBy { it.lastName }
-                } else {
-                    personnelList.sortedByDescending { it.lastName }
-                }
-            }
-            "Title" -> {
-                if (selectedFilterType == "Ascending") {
-                    personnelList.sortedBy { it.title }
-                } else {
-                    personnelList.sortedByDescending { it.title }
-                }
-            }
-            else -> personnelList
-        }
-
-        adapter = PersonnelAdapter(sortedPersonnelList.toMutableList())
-        recyclerView.adapter = adapter
-        //TODO: Maybe add retention of checked items?
-    }
-
-    private fun ShowDialog(){
-        val newFilterView = LayoutInflater.from(this).inflate(R.layout.filter_options, null)
-        val dialogHelper = NewFilterHelper(newFilterView)
-
-        AlertDialog.Builder(this)
-            .setView(newFilterView)
-            .setTitle(R.string.filter)
-            .setPositiveButton(R.string.ok) {_, _ ->
-                selectedFilterOption = dialogHelper.getSelectedSpinnerOption()
-                selectedFilterType = dialogHelper.getSelectedSpinnerType()
-                SortList()
-            }.show()
-
-        dialogHelper.populateSpinnerOptions()
-        dialogHelper.populateSpinnerType()
-    }
-
     private fun changeStatusBarColor(window: Window, color: Int){
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = color
     }
-
     private fun checkNfcCapability() {
         val nfcUtils = NfcUtils(this)
         val hasNfcCapability = nfcUtils.hasNfcCapability()
@@ -262,11 +83,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Toast.makeText(this, "NFC is supported and enabled", Toast.LENGTH_SHORT).show()
             else
                 Toast.makeText(this, "NFC is supported but not enabled", Toast.LENGTH_SHORT).show()
-                //showNfcNotEnabledDialog()
+            //showNfcNotEnabledDialog()
         } else
             showNfcNotSupportedDialog()
     }
+    private fun showNfcNotSupportedDialog() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.nfc_not_supported_dialog)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        val btnClose : Button = dialog.findViewById(R.id.btn_nfcNSupported)
+
+        btnClose.setOnClickListener{
+            finish()
+        }
+
+        dialog.show()
+    }
+/*
     private fun showNfcNotEnabledDialog(){
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -295,21 +131,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         dialog.show()
     }
 
-    private fun showNfcNotSupportedDialog() {
-        val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.nfc_not_supported_dialog)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        val btnClose : Button = dialog.findViewById(R.id.btn_nfcNSupported)
-
-        btnClose.setOnClickListener{
-            finish()
-        }
-
-        dialog.show()
-    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
@@ -320,26 +142,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
-
-    private fun refreshPersonnelList(personnelList: MutableList<Personnel>) {
-        checkedItems.addAll(adapter.getSelectedItems())
-        checkedItems.removeAll(adapter.getRemovedItems())
-        //TODO: Fix duplicates in checkedItems list, implement logic so the list takes max 4 items
-        Log.d("Checked items", checkedItems.toString())
-        Log.d("Checked tags", adapter.getSelectedItems().toString())
-        if(personnelList.isNotEmpty())
-            twEmpty.text = ""
-        adapter = PersonnelAdapter(personnelList, checkedItems)
-        recyclerView.adapter = adapter
-    }
-
-    private fun loadPersonnelList() {
-        val personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
-        if (personnelList.isNotEmpty())
-            twEmpty.text = ""
-        adapter = PersonnelAdapter(personnelList.toMutableList())
-        recyclerView.adapter = adapter
-    }
-
  */
 }

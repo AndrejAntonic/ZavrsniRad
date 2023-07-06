@@ -38,6 +38,51 @@
             android:gravity="center"
             android:padding="10dp"/>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/filterLayout">
+
+            <SearchView
+                android:id="@+id/searchView"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                style="@style/CustomSearchView"
+                android:theme="@style/ThemeOverlay.SearchView"
+                android:searchIcon="@drawable/baseline_search_24"
+                android:closeIcon="@drawable/baseline_close_24"
+                android:searchHintIcon="@android:color/transparent"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/filterLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="56dp">
+
+            <ImageButton
+                android:id="@+id/imgbtn_filter"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/baseline_filter_alt_24"/>
+
+            <ImageButton
+                android:id="@+id/imgbtn_filterOff"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/baseline_filter_alt_off_24"/>
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_personnelRecords"
             android:layout_width="match_parent"
@@ -46,7 +91,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgbtn_filterOff"/>
+            app:layout_constraintTop_toBottomOf="@id/filterLayout"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

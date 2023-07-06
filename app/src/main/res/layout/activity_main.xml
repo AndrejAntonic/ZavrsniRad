@@ -27,27 +27,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/tb_mainActivity">
-
-            <SearchView
-                android:id="@+id/searchView"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                style="@style/CustomSearchView"
-                android:theme="@style/ThemeOverlay.SearchView"
-                android:searchIcon="@drawable/baseline_search_24"
-                android:closeIcon="@drawable/baseline_close_24"
-                android:searchHintIcon="@android:color/transparent"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="end" />
-        </RelativeLayout>
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -1,5 +1,6 @@
 package com.example.foikadrovskanfc
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -9,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.Window
 import android.view.WindowManager
@@ -23,6 +25,7 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.material3.AlertDialog
 import androidx.compose.ui.text.toLowerCase
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -37,6 +40,7 @@ import com.example.foikadrovskanfc.database.PersonnelDatabase
 import com.example.foikadrovskanfc.entities.Personnel
 import com.example.foikadrovskanfc.entities.UserResponse
 import com.example.foikadrovskanfc.helpers.MockDataLoader
+import com.example.foikadrovskanfc.helpers.NewFilterHelper
 import com.example.foikadrovskanfc.utils.NfcUtils
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -99,6 +103,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Toast.makeText(this, "Please select an employee first!", Toast.LENGTH_SHORT).show()
         }
 
+        filterOn = findViewById(R.id.imgbtn_filter)
+        filterOn.setOnClickListener{
+            ShowDialog()
+        }
+
         searchView = findViewById(R.id.searchView)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -127,6 +136,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
         })
+    }
+
+    private fun ShowDialog(){
+        val newFilterView = LayoutInflater.from(this).inflate(R.layout.filter_options, null)
+        val dialogHelper = NewFilterHelper(newFilterView)
+
+        AlertDialog.Builder(this)
+            .setView(newFilterView)
+            .setTitle(R.string.filter)
+            .setPositiveButton(R.string.ok) {_, _ ->
+
+            }.show()
+
+        dialogHelper.populateSpinnerOptions()
+        dialogHelper.populateSpinnerType()
     }
 
     private fun changeStatusBarColor(window: Window, color: Int){
@@ -206,6 +230,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun refreshPersonnelList(personnelList: MutableList<Personnel>) {
         checkedItems.addAll(adapter.getSelectedItems())
         checkedItems.removeAll(adapter.getRemovedItems())
+        //TODO: Fix duplicates in checkedItems list, implement logic so the list takes max 4 items
         Log.d("Checked items", checkedItems.toString())
         Log.d("Checked tags", adapter.getSelectedItems().toString())
         if(personnelList.isNotEmpty())

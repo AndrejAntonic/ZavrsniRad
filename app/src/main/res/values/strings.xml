@@ -2,6 +2,7 @@
     <string name="app_name">Kadrovska NFC</string>
     <string name="nfcNSupported">This device does not support NFC.</string>
     <string name="nfcNEnabled">The NFC is not enabled.</string>
+    <string name="ok">OK</string>
     <string name="close">Close</string>
     <string name="enable">Enable</string>
     <string name="generateImage">Generate image</string>
@@ -12,4 +13,16 @@
     <string name="FOI">Fakultet Organizacije i Informatike</string>
     <string name="info">Info</string>
     <string name="empty_rw">To show data please click the refresh button in the navigation bar.</string>
+    <string name="filter">Filter</string>
+    <string name="filter_by">Filter by:</string>
+    <string-array name="filter_options">
+        <item>Name</item>
+        <item>Surname</item>
+        <item>Title</item>
+    </string-array>
+    <string name="filter_type">Filter type:</string>
+    <string-array name="filter_types">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
 </resources>

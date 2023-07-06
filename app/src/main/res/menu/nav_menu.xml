@@ -5,6 +5,24 @@
     tools:showIn = "navigation_view">
 
     <group
+        android:id="@+id/menuHome"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/baseline_home_24_black"
+            android:title="@string/home"/>
+    </group>
+
+    <group
+        android:id="@+id/menuSettings"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/baseline_settings_24_black"
+            android:title="@string/settings"/>
+    </group>
+
+    <group
         android:id="@+id/menuRefresh"
         android:checkableBehavior="none">
         <item

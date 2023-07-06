@@ -33,12 +33,16 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.foikadrovskanfc.adapters.PersonnelAdapter
 import com.example.foikadrovskanfc.api.ApiInterface
 import com.example.foikadrovskanfc.api.ApiService
 import com.example.foikadrovskanfc.database.PersonnelDatabase
 import com.example.foikadrovskanfc.entities.Personnel
 import com.example.foikadrovskanfc.entities.UserResponse
+import com.example.foikadrovskanfc.fragments.HomeFragment
+import com.example.foikadrovskanfc.fragments.InfoFragment
+import com.example.foikadrovskanfc.fragments.SettingsFragment
 import com.example.foikadrovskanfc.helpers.MockDataLoader
 import com.example.foikadrovskanfc.helpers.NewFilterHelper
 import com.example.foikadrovskanfc.utils.NfcUtils
@@ -64,10 +68,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var searchView: SearchView
     private lateinit var adapter: PersonnelAdapter
     private lateinit var drawerLayout: DrawerLayout
+
+
     private val checkedItems: MutableList<Personnel> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        drawerLayout = findViewById(R.id.drawerLayout_main)
+        val toolbar = findViewById<Toolbar>(R.id.tb_mainActivity)
+        setSupportActionBar(toolbar)
+
+        val navigationView = findViewById<NavigationView>(R.id.navigationView_main)
+        navigationView.setNavigationItemSelectedListener(this)
+
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        if(savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, HomeFragment()).commit()
+            navigationView.setCheckedItem(R.id.menuHome)
+        }
+
+        /*
         PersonnelDatabase.buildInstance(applicationContext)
         //PersonnelDatabase.getInstance().getPersonnelDAO().deleteAllPersonnel()
 
@@ -143,8 +168,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
         })
+
+         */
     }
 
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.home -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, HomeFragment()).commit()
+            R.id.settings -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, SettingsFragment()).commit()
+            R.id.info -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, InfoFragment()).commit()
+        }
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+    override fun onBackPressed() {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START))
+            drawerLayout.closeDrawer(GravityCompat.START)
+        else
+            onBackPressedDispatcher.onBackPressed()
+    }
+/*
     private fun ClearFilter() {
         val personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
         adapter = PersonnelAdapter(personnelList.toMutableList())
@@ -293,4 +340,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         adapter = PersonnelAdapter(personnelList.toMutableList())
         recyclerView.adapter = adapter
     }
+
+ */
 }

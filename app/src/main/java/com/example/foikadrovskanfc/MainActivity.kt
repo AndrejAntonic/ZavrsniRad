@@ -110,6 +110,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             ShowDialog()
         }
 
+        filterOff = findViewById(R.id.imgbtn_filterOff)
+        filterOff.setOnClickListener{
+            ClearFilter()
+        }
+
         searchView = findViewById(R.id.searchView)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -138,6 +143,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
         })
+    }
+
+    private fun ClearFilter() {
+        val personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
+        adapter = PersonnelAdapter(personnelList.toMutableList())
+        recyclerView.adapter = adapter
     }
 
     private fun SortList() {

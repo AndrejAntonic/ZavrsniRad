@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
@@ -15,6 +16,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.example.foikadrovskanfc.fragments.HomeFragment
 import com.example.foikadrovskanfc.fragments.InfoFragment
 import com.example.foikadrovskanfc.fragments.SettingsFragment
@@ -23,43 +27,95 @@ import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var fragmentManager: FragmentManager
+    private lateinit var homeFragment: HomeFragment
+    private lateinit var settingsFragment: SettingsFragment
+    private lateinit var infoFragment: InfoFragment
+    private lateinit var currentFragment: Fragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         checkNfcCapability()
 
-        drawerLayout = findViewById(R.id.drawerLayout_main)
         val toolbar = findViewById<Toolbar>(R.id.tb_mainActivity)
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
 
+        drawerLayout = findViewById(R.id.drawerLayout_main)
         val navigationView = findViewById<NavigationView>(R.id.navigationView_main)
         navigationView.setNavigationItemSelectedListener(this)
 
-        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav)
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+        fragmentManager = supportFragmentManager
+        homeFragment = HomeFragment()
+        settingsFragment = SettingsFragment()
+        infoFragment = InfoFragment()
+
+        if (savedInstanceState == null) {
+            showFragment(homeFragment)
+            navigationView.setCheckedItem(R.id.home)
+        } else {
+            currentFragment = fragmentManager.getFragment(savedInstanceState, "currentFragment")
+                ?: homeFragment
+        }
+
+        val drawerToggle = object : androidx.appcompat.app.ActionBarDrawerToggle(
+            this,
+            drawerLayout,
+            toolbar,
+            R.string.open_nav,
+            R.string.close_nav
+        ) {
+            override fun onDrawerClosed(drawerView: View) {
+                super.onDrawerClosed(drawerView)
+                updateMenuItemsVisibility(currentFragment)
+            }
+        }
+
+        drawerLayout.addDrawerListener(drawerToggle)
+        drawerToggle.syncState()
 
         val window = window
         val statusBarColor = ContextCompat.getColor(this, R.color.red)
         changeStatusBarColor(window, statusBarColor)
-
-        if(savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, HomeFragment()).commit()
-            navigationView.setCheckedItem(R.id.menuHome)
-        }
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.home -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, HomeFragment()).commit()
-            R.id.settings -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, SettingsFragment()).commit()
-            R.id.info -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, InfoFragment()).commit()
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        fragmentManager.putFragment(outState, "currentFragment", currentFragment)
+    }
+
+    private fun updateMenuItemsVisibility(fragment: Fragment) {
+        val navigationView = findViewById<NavigationView>(R.id.navigationView_main)
+        val menu = navigationView.menu
+
+        val refreshItem = menu.findItem(R.id.refresh)
+        val clearDatabaseItem = menu.findItem(R.id.clearDatabase)
+
+        when (fragment) {
+            is HomeFragment -> {
+                refreshItem.isVisible = true
+                clearDatabaseItem.isVisible = true
+            }
+            else -> {
+                refreshItem.isVisible = false
+                clearDatabaseItem.isVisible = false
+            }
         }
+    }
+    private fun showFragment(fragment: Fragment) {
+        val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, fragment)
+        transaction.commit()
+    }
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        currentFragment = when (item.itemId) {
+            R.id.home -> homeFragment
+            R.id.settings -> settingsFragment
+            R.id.info -> infoFragment
+            else -> throw IllegalArgumentException("Invalid menu item selected")
+        }
+
+        showFragment(currentFragment)
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }

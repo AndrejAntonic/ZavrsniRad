@@ -11,6 +11,16 @@
             android:id="@+id/home"
             android:icon="@drawable/baseline_home_24_black"
             android:title="@string/home"/>
+
+        <item
+            android:id="@+id/refresh"
+            android:icon="@drawable/baseline_refresh_24_black"
+            android:title="@string/refresh"/>
+
+        <item
+            android:id="@+id/clearDatabase"
+            android:icon="@drawable/baseline_delete_24_black"
+            android:title="@string/delete"/>
     </group>
 
     <group
@@ -22,27 +32,10 @@
             android:title="@string/settings"/>
     </group>
 
-    <group
-        android:id="@+id/menuRefresh"
-        android:checkableBehavior="none">
-        <item
-            android:id="@+id/refresh"
-            android:icon="@drawable/baseline_refresh_24_black"
-            android:title="@string/refresh"/>
-    </group>
-
-    <group
-        android:id="@+id/menuClear"
-        android:checkableBehavior="none">
-        <item
-            android:id="@+id/clearDatabase"
-            android:icon="@drawable/baseline_delete_24_black"
-            android:title="@string/delete"/>
-    </group>
 
     <group
         android:id="@+id/menuInfo"
-        android:checkableBehavior="none">
+        android:checkableBehavior="single">
         <item
             android:id="@+id/info"
             android:icon="@drawable/baseline_info_24"

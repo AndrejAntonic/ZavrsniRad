@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kadrovska NFC</string>
+    <string name="nfcNSupported">Ovaj uređaj ne podržava NFC.</string>
+    <string name="nfcNEnabled">NFC nije uključen.</string>
+    <string name="ok">OK</string>
+    <string name="close">Zatvori</string>
+    <string name="enable">Uključi</string>
+    <string name="generateImage">Generiraj sliku</string>
+    <string name="send">Pošalji</string>
+    <string name="home">Početna</string>
+    <string name="settings">Postavke</string>
+    <string name="refresh">Osvježi</string>
+    <string name="delete">Očisti bazu podataka</string>
+    <string name="open_nav">Otvori</string>
+    <string name="close_nav">Zatvori</string>
+    <string name="FOI">Fakultet organizacije i informatike</string>
+    <string name="info">Info</string>
+    <string name="empty_rw">Kako bi se prikazali podaci molimo pritisnite gumb osvježi u navigacijskoj traci.</string>
+    <string name="filter">Filtriranje</string>
+    <string name="filter_by">Filtriraj po:</string>
+    <string-array name="filter_options">
+        <item>Ime</item>
+        <item>Prezime</item>
+        <item>Titula</item>
+    </string-array>
+    <string name="filter_type">Tip filtriranja:</string>
+    <string-array name="filter_types">
+        <item>Uzlazno</item>
+        <item>Silazno</item>
+    </string-array>
+    <string name="eng">Engleski</string>
+    <string name="cro">Hrvatski</string>
+    <string name="author">Autor:</string>
+    <string name="author_name">Andrej Antonić</string>
+    <string name="mentor">Mentor:</string>
+    <string name="mentor_name">Doc. dr. sc. Boris Tomaš</string>
+    <string name="coevaluator">Suocjenjivač</string>
+    <string name="coevaluator_name">Prof. dr. sc. Ivan Magdalenić</string>
+    <string name="organization">Organizacija:</string>
+    <string name="title">Naziv rada:</string>
+    <string name="title_text">Pametni ekran za prikaz podataka koristeći e-ink tehnologiju</string>
+    <string name="description">Opis:</string>
+    <string name="description_text">Potrebno je izraditi pametni ekran (e-ink) koji prikazuje podatke s FOI sustava kadrovske evidencije. Riješenje treba biti energetski efikasno, tako da je nužno analizirati tehnike prikupljanja i čuvanja energije.</string>
+    <string name="study">Studij:</string>
+    <string name="study_name">Informacijski/Poslovni sustavi</string>
+    <string name="instructions">Upute:</string>
+    <string name="instructions_step1">1. Nakon što je aplikacija otvorena, ako se ne prikazuju podaci otvorite navigacijsku traku i pritisnite refresh.</string>
+    <string name="instructions_step2">2. Odaberite imena za koja želite generirati sliku. Možete odabrati do 4 imena.</string>
+    <string name="instructions_step3">3. Pritisnite kvačicu u donjem desnom dijelu ekrana.</string>
+    <string name="instructions_step4">4. Otvara se generirana slika. Možete se vratiti ili poslati sliku putem NFC-a.</string>
+    <string name="instructions_step5">5. Približite svoj mobilni telefon zaslonu e-papira.</string>
+    <string name="instructions_step6">6. Nakon nekog vremena zaslon bi se trebao ažurirati i prikazati novu sliku.</string>
+</resources>

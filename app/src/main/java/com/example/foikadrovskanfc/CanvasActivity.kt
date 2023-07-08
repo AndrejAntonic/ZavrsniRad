@@ -10,6 +10,8 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.graphics.Canvas
 import android.util.Log
+import android.view.Window
+import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import com.example.foikadrovskanfc.entities.Personnel
 import java.io.ByteArrayOutputStream
@@ -23,6 +25,9 @@ class CanvasActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_canvas)
+        val window = window
+        val statusBarColor = ContextCompat.getColor(this, R.color.red)
+        changeStatusBarColor(window, statusBarColor)
 
         backButton = findViewById(R.id.imgbtn_backArrow)
         backButton.setOnClickListener{
@@ -41,6 +46,11 @@ class CanvasActivity : AppCompatActivity() {
         //logByteArray(imageByteArray)
     }
 
+    private fun changeStatusBarColor(window: Window, color: Int){
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = color
+    }
+
     fun logByteArray(byteArray: ByteArray) {
         val hexString = byteArray.joinToString("") { "%02x".format(it) }
         Log.d("Hexadecimal", "Hexadecimal representation: $hexString")
@@ -53,6 +63,7 @@ class CanvasActivity : AppCompatActivity() {
     private fun createImageBitmap(width: Int, height: Int, logoDrawable: Drawable?, receivedList: ArrayList<Personnel>): Bitmap{
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         var canvas = Canvas(bitmap)
+        canvas.drawColor(Color.WHITE)
 
         logoDrawable?.let {
             val logoWidth = width / 5

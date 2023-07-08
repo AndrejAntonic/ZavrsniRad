@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.FOIKadrovskaNFC" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.FOIKadrovskaNFC" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/red</item>
         <item name="colorAccent">@color/red</item>
+        <item name="colorSecondary">@color/red</item>
     </style>
 </resources>

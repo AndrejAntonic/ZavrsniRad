@@ -19,6 +19,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.preference.PreferenceManager
 import com.example.foikadrovskanfc.fragments.HomeFragment
 import com.example.foikadrovskanfc.fragments.InfoFragment
 import com.example.foikadrovskanfc.fragments.SettingsFragment
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         checkNfcCapability()
+        applyUserSettings()
 
         val toolbar = findViewById<Toolbar>(R.id.tb_mainActivity)
         setSupportActionBar(toolbar)
@@ -131,6 +133,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawerLayout.closeDrawer(GravityCompat.START)
         else
             onBackPressedDispatcher.onBackPressed()
+    }
+    private fun applyUserSettings() {
+        PreferenceManager.getDefaultSharedPreferences(this)?.
+        let { pref ->
+            SettingsActivity.switchDarkMode(
+                pref.getBoolean("preference_dark_mode", false)
+            )
+        }
     }
     private fun changeStatusBarColor(window: Window, color: Int){
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)

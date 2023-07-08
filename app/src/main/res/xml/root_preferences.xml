@@ -1,0 +1,20 @@
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreferenceCompat
+        android:key="preference_dark_mode"
+        android:title="@string/forceDark"
+        android:defaultValue="false"
+        android:icon="@drawable/baseline_dark_mode_24_black"/>
+
+    <ListPreference
+        android:key="preference_language"
+        android:title="@string/language"
+        android:defaultValue="1"
+        android:entries="@array/languageEntries"
+        android:entryValues="@array/languageValues"
+        android:icon="@drawable/baseline_language_24_black"
+        android:dialogIcon="@drawable/baseline_language_24_black"/>
+
+</PreferenceScreen>

@@ -52,5 +52,13 @@
     <string name="instructions_step5">5. Približite svoj mobilni telefon zaslonu e-papira.</string>
     <string name="instructions_step6">6. Nakon nekog vremena zaslon bi se trebao ažurirati i prikazati novu sliku.</string>
     <string name="forceDark">Prisilni tamni način rada</string>
-    <string name="language">Jezik</string>
+    <string name="language">Jezik aplikacije</string>
+    <string name="messages_header">Poruke</string>
+    <string name="sync_header">Sinkroniziraj</string>
+    <string name="signature_title">Vaš potpis</string>
+    <string name="reply_title">Zadana radnja odgovora</string>
+    <string name="sync_title">Povremeno sinkronizirajte e-poštu</string>
+    <string name="attachment_title">Preuzmite dolazne privitke</string>
+    <string name="attachment_summary_on">Automatski preuzimajte privitke za dolaznu e-poštu</string>
+    <string name="attachment_summary_off">Privitke preuzimajte samo kada se to ručno zatraži</string>
 </resources>

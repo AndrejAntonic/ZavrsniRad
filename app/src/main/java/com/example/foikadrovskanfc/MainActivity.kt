@@ -1,6 +1,7 @@
 package com.example.foikadrovskanfc
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -10,7 +11,6 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         infoFragment = InfoFragment()
 
         if (savedInstanceState == null) {
+            currentFragment = homeFragment
             showFragment(homeFragment)
             navigationView.setCheckedItem(R.id.home)
         } else {
@@ -110,7 +111,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         currentFragment = when (item.itemId) {
             R.id.home -> homeFragment
-            R.id.settings -> settingsFragment
+            R.id.settings -> {
+                val intent = Intent(baseContext, SettingsActivity::class.java)
+                drawerLayout.closeDrawer(GravityCompat.START)
+                startActivity(intent)
+                return true
+            }
             R.id.info -> infoFragment
             else -> throw IllegalArgumentException("Invalid menu item selected")
         }
@@ -119,6 +125,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
+
     override fun onBackPressed() {
         if(drawerLayout.isDrawerOpen(GravityCompat.START))
             drawerLayout.closeDrawer(GravityCompat.START)

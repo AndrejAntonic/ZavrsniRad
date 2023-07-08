@@ -25,7 +25,7 @@
 
     <group
         android:id="@+id/menuSettings"
-        android:checkableBehavior="single">
+        android:checkableBehavior="none">
         <item
             android:id="@+id/settings"
             android:icon="@drawable/baseline_settings_24_black"

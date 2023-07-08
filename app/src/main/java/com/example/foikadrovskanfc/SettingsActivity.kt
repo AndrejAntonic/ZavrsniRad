@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import com.example.foikadrovskanfc.fragments.SettingsFragment
 
+const val RESULT_LANG_CHANGED = AppCompatActivity.RESULT_FIRST_USER
 class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     private var darkModeSelected: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +37,9 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
             "preference_dark_mode" -> {
                 darkModeSelected = sharedPreferences?.getBoolean(key, false) ?: false
                 switchDarkMode(darkModeSelected)
+                //TODO -> Switch to dark mode when pressed
             }
-            "preference_language" -> TODO()
+            "preference_language" -> notifyLanguageChangedAndClose()
         }
     }
 
@@ -45,7 +47,11 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = color
     }
-
+    private fun notifyLanguageChangedAndClose() {
+        setResult(
+            RESULT_LANG_CHANGED)
+        finish()
+    }
     companion object {
         fun switchDarkMode(isDarkModeSelected: Boolean?) {
             if (isDarkModeSelected == true) {

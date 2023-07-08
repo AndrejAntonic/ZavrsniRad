@@ -2,6 +2,7 @@ package com.example.foikadrovskanfc
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -25,6 +27,7 @@ import com.example.foikadrovskanfc.fragments.InfoFragment
 import com.example.foikadrovskanfc.fragments.SettingsFragment
 import com.example.foikadrovskanfc.utils.NfcUtils
 import com.google.android.material.navigation.NavigationView
+import java.util.Locale
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
@@ -33,6 +36,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var settingsFragment: SettingsFragment
     private lateinit var infoFragment: InfoFragment
     private lateinit var currentFragment: Fragment
+    private val settingsLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.
+                resultCode ==
+                RESULT_LANG_CHANGED) {
+                recreate()
+            }
+        }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -114,9 +125,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         currentFragment = when (item.itemId) {
             R.id.home -> homeFragment
             R.id.settings -> {
-                val intent = Intent(baseContext, SettingsActivity::class.java)
                 drawerLayout.closeDrawer(GravityCompat.START)
-                startActivity(intent)
+                settingsLauncher.launch(Intent(this, SettingsActivity::class.java))
                 return true
             }
             R.id.info -> infoFragment
@@ -134,13 +144,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         else
             onBackPressedDispatcher.onBackPressed()
     }
-    private fun applyUserSettings() {
+    private fun applyUserSettings(): Boolean {
         PreferenceManager.getDefaultSharedPreferences(this)?.
         let { pref ->
             SettingsActivity.switchDarkMode(
                 pref.getBoolean("preference_dark_mode", false)
             )
+            val lang = pref.getString("preference_language", "EN")
+            if (lang != null) {
+                val locale = Locale(lang)
+                if (
+                    resources.configuration.locales[0].language != locale.language) {
+                    resources.configuration.setLocale(locale)
+                    Locale.setDefault(locale)
+                    createConfigurationContext(
+                        resources.configuration
+                    )
+                    recreate()
+                    return false
+                }
+            }
         }
+        return true
     }
     private fun changeStatusBarColor(window: Window, color: Int){
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)

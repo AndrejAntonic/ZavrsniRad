@@ -50,4 +50,6 @@
     <string name="instructions_step4">4. Generated image opens up. You can go back or send the image by NFC.</string>
     <string name="instructions_step5">5. Put your mobile phone close to the E-paper display.</string>
     <string name="instructions_step6">6. After some time the display should update and show the new image.</string>
+    <string name="forceDark">Force dark mode</string>
+    <string name="language">Language</string>
 </resources>

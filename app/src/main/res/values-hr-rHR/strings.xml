@@ -51,4 +51,6 @@
     <string name="instructions_step4">4. Otvara se generirana slika. Možete se vratiti ili poslati sliku putem NFC-a.</string>
     <string name="instructions_step5">5. Približite svoj mobilni telefon zaslonu e-papira.</string>
     <string name="instructions_step6">6. Nakon nekog vremena zaslon bi se trebao ažurirati i prikazati novu sliku.</string>
+    <string name="forceDark">Prisilni tamni način rada</string>
+    <string name="language">Jezik</string>
 </resources>

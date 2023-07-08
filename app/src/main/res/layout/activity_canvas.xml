@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:text="@string/send"
         android:textColor="@color/white"
-        android:background="@color/red"
+        android:background="@drawable/rounded_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

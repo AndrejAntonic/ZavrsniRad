@@ -13,240 +13,240 @@
         android:layout_marginStart="20dp"
         tools:context=".fragments.InfoFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/author"
-        android:textSize="20dp"
-        android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/author"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="5dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/author_name"
-        android:layout_marginStart="10dp"
-        android:textSize="15dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/author_name"
+            android:layout_marginStart="10dp"
+            android:textSize="15dp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="25dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="25dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/mentor"
-        android:textSize="20dp"
-        android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mentor"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="5dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/mentor_name"
-        android:layout_marginStart="10dp"
-        android:textSize="15dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mentor_name"
+            android:layout_marginStart="10dp"
+            android:textSize="15dp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="25dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="25dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/coevaluator"
-        android:textSize="20dp"
-        android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/coevaluator"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="5dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/coevaluator_name"
-        android:layout_marginStart="10dp"
-        android:textSize="15dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/coevaluator_name"
+            android:layout_marginStart="10dp"
+            android:textSize="15dp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="25dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="25dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/organization"
-        android:textSize="20dp"
-        android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/organization"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="5dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/FOI"
-        android:layout_marginStart="10dp"
-        android:textSize="15dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/FOI"
+            android:layout_marginStart="10dp"
+            android:textSize="15dp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="25dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="25dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/study"
-        android:textSize="20dp"
-        android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/study"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="5dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/study_name"
-        android:layout_marginStart="10dp"
-        android:textSize="15dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/study_name"
+            android:layout_marginStart="10dp"
+            android:textSize="15dp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="25dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="25dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title"
-        android:textSize="20dp"
-        android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="5dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_text"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="30dp"
-        android:textSize="15dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_text"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="30dp"
+            android:textSize="15dp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="25dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="25dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/description"
-        android:textSize="20dp"
-        android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/description"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="5dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/description_text"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="30dp"
-        android:textSize="15dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/description_text"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="30dp"
+            android:textSize="15dp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="25dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="25dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/instructions"
-        android:textSize="20dp"
-        android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/instructions"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="5dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/instructions_step1"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="30dp"
-        android:textSize="15dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/instructions_step1"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="30dp"
+            android:textSize="15dp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="5dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/instructions_step2"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="30dp"
-        android:textSize="15dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/instructions_step2"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="30dp"
+            android:textSize="15dp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="5dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/instructions_step3"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="30dp"
-        android:textSize="15dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/instructions_step3"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="30dp"
+            android:textSize="15dp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="5dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/instructions_step4"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="30dp"
-        android:textSize="15dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/instructions_step4"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="30dp"
+            android:textSize="15dp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="5dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/instructions_step5"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="30dp"
-        android:textSize="15dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/instructions_step5"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="30dp"
+            android:textSize="15dp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="5dp"/>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/instructions_step6"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="30dp"
-        android:textSize="15dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/instructions_step6"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="30dp"
+            android:textSize="15dp" />
 
     </LinearLayout>
 

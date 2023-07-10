@@ -5,12 +5,12 @@
     tools:showIn = "navigation_view">
 
     <group
-        android:id="@+id/menuHome"
-        android:checkableBehavior="single">
+        android:id="@+id/menuHome">
         <item
             android:id="@+id/home"
             android:icon="@drawable/baseline_home_24_black"
-            android:title="@string/home"/>
+            android:title="@string/home"
+            android:checkable="true"/>
 
         <item
             android:id="@+id/refresh"

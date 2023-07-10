@@ -40,6 +40,7 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
                 //TODO -> Switch to dark mode when pressed
             }
             "preference_language" -> notifyLanguageChangedAndClose()
+            //TODO -> Language doesn't change in main activity and app needs to be restared for it to change language in other activities
         }
     }
 

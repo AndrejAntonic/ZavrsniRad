@@ -158,10 +158,12 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = adapter
         //TODO: Maybe add retention of checked items?
     }
-    private fun loadPersonnelList() {
+    fun loadPersonnelList() {
         val personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
         if (personnelList.isNotEmpty())
             twEmpty.text = ""
+        else
+            twEmpty.text = getString(R.string.empty_rw)
         adapter = PersonnelAdapter(personnelList.toMutableList())
         recyclerView.adapter = adapter
     }

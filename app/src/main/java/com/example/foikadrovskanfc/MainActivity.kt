@@ -1,11 +1,13 @@
 package com.example.foikadrovskanfc
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
@@ -22,11 +24,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.PreferenceManager
+import com.example.foikadrovskanfc.api.ApiService
+import com.example.foikadrovskanfc.database.PersonnelDatabase
 import com.example.foikadrovskanfc.fragments.HomeFragment
 import com.example.foikadrovskanfc.fragments.InfoFragment
 import com.example.foikadrovskanfc.fragments.SettingsFragment
 import com.example.foikadrovskanfc.utils.NfcUtils
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -130,12 +137,48 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
             R.id.info -> infoFragment
+            R.id.clearDatabase -> {
+                showClearDatabasePopup()
+                drawerLayout.closeDrawer(GravityCompat.START)
+                return true
+            }
+            R.id.refresh -> {
+                drawerLayout.closeDrawer(GravityCompat.START)
+                GlobalScope.launch(Dispatchers.Main) {
+                    performRefresh()
+                }
+                return true
+            }
             else -> throw IllegalArgumentException("Invalid menu item selected")
         }
 
         showFragment(currentFragment)
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private suspend fun performRefresh() {
+        val response = ApiService.getPersonnelData()
+        if (response != null) {
+            homeFragment.loadPersonnelList()
+        } else
+            Log.d("API Error", "Error occurred while fetching personnel data")
+    }
+
+    private fun showClearDatabasePopup() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.delete))
+        builder.setMessage(getString(R.string.deleteQuestion))
+        builder.setPositiveButton(getString(R.string.clear)) { _, _ ->
+            PersonnelDatabase.buildInstance(this)
+            PersonnelDatabase.getInstance().getPersonnelDAO().deleteAllPersonnel()
+            homeFragment.loadPersonnelList()
+        }
+        builder.setNegativeButton(getString(R.string.close)) { _, _ ->
+
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 
     override fun onBackPressed() {

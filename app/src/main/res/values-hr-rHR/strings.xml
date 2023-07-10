@@ -61,4 +61,7 @@
     <string name="attachment_title">Preuzmite dolazne privitke</string>
     <string name="attachment_summary_on">Automatski preuzimajte privitke za dolaznu e-poštu</string>
     <string name="attachment_summary_off">Privitke preuzimajte samo kada se to ručno zatraži</string>
+    <string name="deleteQuestion">Jeste li sigurni da želite očistiti bazu podataka?</string>
+    <string name="clear">Očisti</string>
+    <string name="cancel">Odustani</string>
 </resources>

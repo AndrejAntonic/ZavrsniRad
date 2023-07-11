@@ -53,7 +53,8 @@ class HomeFragment : Fragment() {
         fabPersonnel.setOnClickListener{
             adapter.getSelectedItems().forEach { newItem ->
                 val itemExists = checkedItems.filter { it.id == newItem.id }.isNotEmpty()
-                if(!itemExists)
+                val isListFull = checkedItems.size >= 4
+                if(!itemExists && !isListFull)
                     checkedItems.add(newItem)
             }
             checkedItems.removeAll(adapter.getRemovedItems())
@@ -174,11 +175,11 @@ class HomeFragment : Fragment() {
     private fun refreshPersonnelList(personnelList: MutableList<Personnel>) {
         adapter.getSelectedItems().forEach { newItem ->
             val itemExists = checkedItems.filter { it.id == newItem.id }.isNotEmpty()
-            if(!itemExists)
+            val isListFull = checkedItems.size >= 4
+            if(!itemExists && !isListFull)
                 checkedItems.add(newItem)
         }
         checkedItems.removeAll(adapter.getRemovedItems())
-        //TODO: Fix duplicates in checkedItems list, implement logic so the list takes max 4 items
         Log.d("Checked items", checkedItems.toString())
         Log.d("Checked tags", adapter.getSelectedItems().toString())
         if(personnelList.isNotEmpty())

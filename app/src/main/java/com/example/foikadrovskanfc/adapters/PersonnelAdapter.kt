@@ -13,7 +13,7 @@ import com.example.foikadrovskanfc.entities.Personnel
 class PersonnelAdapter(private var personnelList: List<Personnel>, private var checkedTags: MutableList<Personnel> = mutableListOf()) :
     RecyclerView.Adapter<PersonnelAdapter.PersonnelViewHolder>() {
 
-    private val selectedItems: MutableList<Personnel> = mutableListOf()
+    private val selectedItems: MutableList<Personnel> = checkedTags
     private val removedItems: MutableList<Personnel> = mutableListOf()
 
     inner class PersonnelViewHolder(view: View) : RecyclerView.ViewHolder(view) {

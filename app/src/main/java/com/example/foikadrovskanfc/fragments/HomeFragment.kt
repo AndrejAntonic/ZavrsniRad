@@ -51,7 +51,11 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         fabPersonnel.setOnClickListener{
-            checkedItems.addAll(adapter.getSelectedItems())
+            adapter.getSelectedItems().forEach { newItem ->
+                val itemExists = checkedItems.filter { it.id == newItem.id }.isNotEmpty()
+                if(!itemExists)
+                    checkedItems.add(newItem)
+            }
             checkedItems.removeAll(adapter.getRemovedItems())
             if(checkedItems.isNotEmpty()) {
                 val intent = Intent(requireContext(), CanvasActivity::class.java)
@@ -168,7 +172,11 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = adapter
     }
     private fun refreshPersonnelList(personnelList: MutableList<Personnel>) {
-        checkedItems.addAll(adapter.getSelectedItems())
+        adapter.getSelectedItems().forEach { newItem ->
+            val itemExists = checkedItems.filter { it.id == newItem.id }.isNotEmpty()
+            if(!itemExists)
+                checkedItems.add(newItem)
+        }
         checkedItems.removeAll(adapter.getRemovedItems())
         //TODO: Fix duplicates in checkedItems list, implement logic so the list takes max 4 items
         Log.d("Checked items", checkedItems.toString())

@@ -54,7 +54,19 @@
         android:background="@drawable/rounded_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout_canvas"
+        app:layout_constraintStart_toEndOf="@+id/btn_saveImage"/>
+
+    <Button
+        android:id="@+id/btn_saveImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button"
+        android:text="@string/save"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_sendImage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout_canvas"/>
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout_canvas" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

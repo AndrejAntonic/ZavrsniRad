@@ -1,8 +1,8 @@
 package com.example.foikadrovskanfc
 
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -13,6 +13,9 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.graphics.Canvas
+import android.nfc.NdefMessage
+import android.nfc.NdefRecord
+import android.nfc.NfcAdapter
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -33,6 +36,8 @@ class CanvasActivity : AppCompatActivity() {
     private lateinit var backButton: ImageButton
     private lateinit var imageView: ImageView
     private lateinit var sendButton: Button
+    private lateinit var saveButton: Button
+    private var nfcAdapter: NfcAdapter? = null
     private val REQUEST_WRITE_STORAGE = 112
     private val width = 400
     private val height = 300
@@ -43,6 +48,7 @@ class CanvasActivity : AppCompatActivity() {
         val window = window
         val statusBarColor = ContextCompat.getColor(this, R.color.red)
         changeStatusBarColor(window, statusBarColor)
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this)
 
         backButton = findViewById(R.id.imgbtn_backArrow)
         backButton.setOnClickListener{
@@ -59,12 +65,41 @@ class CanvasActivity : AppCompatActivity() {
 
         val imageByteArray = convertBitmapToByteArray(originalImageBitmap)
 
-        sendButton = findViewById(R.id.btn_sendImage)
-        sendButton.setOnClickListener {
-            Log.d("bbbbbb", "bbbbbbb")
+        saveButton = findViewById(R.id.btn_saveImage)
+        saveButton.setOnClickListener {
             saveBitmapToGallery(this@CanvasActivity, originalImageBitmap, "MyImage")
         }
+
+        sendButton = findViewById(R.id.btn_sendImage)
+        sendButton.setOnClickListener {
+            nfcAdapter?.let {
+                if(!it.isEnabled) {
+                    openNfcSettings()
+                }
+                else
+                    sendNfcMessage(imageByteArray)
+            }
+        }
         //logByteArray(imageByteArray)
+    }
+
+    private fun createNdefMessage(image: ByteArray): NdefMessage {
+        val mimeRecord = NdefRecord.createMime("image/jpeg", image)
+        return NdefMessage(mimeRecord)
+    }
+
+    private fun sendNfcMessage(image: ByteArray) {
+        val ndefMessage = createNdefMessage(image)
+        nfcAdapter?.setNdefPushMessage(ndefMessage, this)
+    }
+
+    private fun openNfcSettings() {
+        try {
+            val intent = Intent(android.provider.Settings.ACTION_NFC_SETTINGS)
+            startActivity(intent)
+        } catch (e: Exception) {
+
+        }
     }
 
     private fun checkWriteStoragePermission(activity: AppCompatActivity): Boolean {

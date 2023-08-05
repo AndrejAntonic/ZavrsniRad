@@ -64,4 +64,6 @@
     <string name="clear">Clear</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="nfcAlertTitle">NFC is not enabled</string>
+    <string name="nfcAlertMessage">Would you like to enable it?</string>
 </resources>

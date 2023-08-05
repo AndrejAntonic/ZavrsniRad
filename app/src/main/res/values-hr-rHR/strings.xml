@@ -65,4 +65,6 @@
     <string name="clear">Očisti</string>
     <string name="cancel">Odustani</string>
     <string name="save">Spremi</string>
+    <string name="nfcAlertTitle">NFC nije uključen</string>
+    <string name="nfcAlertMessage">Želite li ga uključiti?</string>
 </resources>

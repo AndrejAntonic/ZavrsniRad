@@ -32,7 +32,7 @@
         android:layout_width="380dp"
         android:layout_height="285dp"
         android:background="@drawable/border"
-        app:layout_constraintBottom_toTopOf="@+id/btn_sendImage"
+        app:layout_constraintBottom_toTopOf="@+id/btn_saveImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tb_canvasActivity">
@@ -46,18 +46,6 @@
     </FrameLayout>
 
     <Button
-        android:id="@+id/btn_sendImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/send"
-        android:textColor="@color/white"
-        android:background="@drawable/rounded_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout_canvas"
-        app:layout_constraintStart_toEndOf="@+id/btn_saveImage"/>
-
-    <Button
         android:id="@+id/btn_saveImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,7 +53,7 @@
         android:text="@string/save"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_sendImage"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/frameLayout_canvas" />
 

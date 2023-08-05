@@ -43,18 +43,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var settingsFragment: SettingsFragment
     private lateinit var infoFragment: InfoFragment
     private lateinit var currentFragment: Fragment
-    private val settingsLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.
-                resultCode ==
-                RESULT_LANG_CHANGED) {
+    private val settingsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_LANG_CHANGED)
                 recreate()
-            }
         }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        checkNfcCapability()
+        //checkNfcCapability()
         applyUserSettings()
 
         val toolbar = findViewById<Toolbar>(R.id.tb_mainActivity)
@@ -216,16 +212,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     private fun checkNfcCapability() {
         val nfcUtils = NfcUtils(this)
-        val hasNfcCapability = nfcUtils.hasNfcCapability()
-        val isNfcEnabled = nfcUtils.isNfcEnabled()
 
-        if(hasNfcCapability) {
-            if(isNfcEnabled)
-                Toast.makeText(this, "NFC is supported and enabled", Toast.LENGTH_SHORT).show()
-            else
+        if(nfcUtils.hasNfcCapability())
+            if(!nfcUtils.isNfcEnabled())
                 Toast.makeText(this, "NFC is supported but not enabled", Toast.LENGTH_SHORT).show()
-            //showNfcNotEnabledDialog()
-        } else
+        else
             showNfcNotSupportedDialog()
     }
     private fun showNfcNotSupportedDialog() {

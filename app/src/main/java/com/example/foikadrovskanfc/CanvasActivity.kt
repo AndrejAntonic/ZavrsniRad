@@ -1,10 +1,12 @@
 package com.example.foikadrovskanfc
 
+import android.app.PendingIntent
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
@@ -13,9 +15,13 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.graphics.Canvas
+import android.net.Uri
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
+import android.nfc.Tag
+import android.nfc.tech.NfcA
+import android.nfc.tech.NfcV
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -23,6 +29,7 @@ import android.util.Log
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.foikadrovskanfc.entities.Personnel
@@ -35,9 +42,9 @@ import java.util.Date
 class CanvasActivity : AppCompatActivity() {
     private lateinit var backButton: ImageButton
     private lateinit var imageView: ImageView
-    private lateinit var sendButton: Button
     private lateinit var saveButton: Button
-    private var nfcAdapter: NfcAdapter? = null
+    private lateinit var proba: Bitmap
+    private lateinit var nfcAdapter: NfcAdapter
     private val REQUEST_WRITE_STORAGE = 112
     private val width = 400
     private val height = 300
@@ -45,7 +52,6 @@ class CanvasActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_canvas)
-        val window = window
         val statusBarColor = ContextCompat.getColor(this, R.color.red)
         changeStatusBarColor(window, statusBarColor)
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
@@ -61,26 +67,129 @@ class CanvasActivity : AppCompatActivity() {
 
         val originalImageBitmap = createImageBitmap(width, height, logoDrawable, receivedList)
         val scaledImageBitmap = Bitmap.createScaledBitmap(originalImageBitmap, 100, 75, false)
-        imageView.setImageBitmap(originalImageBitmap)
+        proba = applyFloydSteinbergDithering(originalImageBitmap)
+        imageView.setImageBitmap(proba)
 
         val imageByteArray = convertBitmapToByteArray(originalImageBitmap)
 
         saveButton = findViewById(R.id.btn_saveImage)
         saveButton.setOnClickListener {
-            saveBitmapToGallery(this@CanvasActivity, originalImageBitmap, "MyImage")
+            saveBitmapToGallery(this@CanvasActivity, originalImageBitmap, "FOI-kadrovska")
         }
+    }
 
-        sendButton = findViewById(R.id.btn_sendImage)
-        sendButton.setOnClickListener {
-            nfcAdapter?.let {
-                if(!it.isEnabled) {
-                    openNfcSettings()
+    override fun onResume() {
+        super.onResume()
+
+        val intent = Intent(this, CanvasActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE)
+        nfcAdapter.enableForegroundDispatch(this, pendingIntent, null, null)
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        nfcAdapter.disableForegroundDispatch(this)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        Log.e("debug", "---------- " + intent!!.action)
+
+        if (NfcAdapter.ACTION_TAG_DISCOVERED == intent!!.action) {
+            val tag = intent!!.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
+            Log.e("debug", "----------$tag")
+
+            if (NfcV.get(tag) != null) {
+                Log.e("debug", "Use NfcV object for further operations")
+            }
+            else if (NfcA.get(tag) != null) {
+                Log.e("debug", "Use NfcA object for further operations")
+            }
+            else Log.e("debug", "Unsupported tag technology")
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    fun applyFloydSteinbergDithering(bitmap: Bitmap): Bitmap {
+        val width = bitmap.width
+        val height = bitmap.height
+        val newBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+
+        for (y in 0 until height) {
+            for (x in 0 until width) {
+                val oldPixel = newBitmap.getPixel(x, y)
+                val grayscale = (Color.red(oldPixel) + Color.green(oldPixel) + Color.blue(oldPixel)) / 3
+
+                // Set the grayscale color to the pixel
+                newBitmap.setPixel(x, y, Color.rgb(grayscale, grayscale, grayscale))
+
+                val newPixel = newBitmap.getPixel(x, y)
+                val error = oldPixel - newPixel
+
+                // Distribute the error to neighboring pixels
+                if (x + 1 < width) {
+                    applyErrorToPixel(newBitmap, x + 1, y, error, 7 / 16f)
                 }
-                else
-                    sendNfcMessage(imageByteArray)
+                if (x - 1 >= 0 && y + 1 < height) {
+                    applyErrorToPixel(newBitmap, x - 1, y + 1, error, 3 / 16f)
+                }
+                if (y + 1 < height) {
+                    applyErrorToPixel(newBitmap, x, y + 1, error, 5 / 16f)
+                }
+                if (x + 1 < width && y + 1 < height) {
+                    applyErrorToPixel(newBitmap, x + 1, y + 1, error, 1 / 16f)
+                }
             }
         }
-        //logByteArray(imageByteArray)
+
+        return newBitmap
+    }
+
+    private fun applyErrorToPixel(bitmap: Bitmap, x: Int, y: Int, error: Int, weight: Float) {
+        val oldPixel = bitmap.getPixel(x, y)
+        val newPixel = Color.rgb(
+            clamp(Color.red(oldPixel) + (error * weight).toInt(), 0, 255),
+            clamp(Color.green(oldPixel) + (error * weight).toInt(), 0, 255),
+            clamp(Color.blue(oldPixel) + (error * weight).toInt(), 0, 255)
+        )
+        bitmap.setPixel(x, y, newPixel)
+    }
+
+    private fun clamp(value: Int, min: Int, max: Int): Int {
+        return value.coerceIn(min, max)
+    }
+
+
+
+
+
+
+
+    private fun byteArrayToBitmap(it: ByteArray): Bitmap {
+        return BitmapFactory.decodeByteArray(it, 0, it.size)
     }
 
     private fun createNdefMessage(image: ByteArray): NdefMessage {
@@ -116,10 +225,10 @@ class CanvasActivity : AppCompatActivity() {
 
     private fun saveBitmapToGallery(context: Context, bitmap: Bitmap, displayName: String) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val filename = "${displayName}_${Date().time}.png"
+            val filename = "${displayName}_${Date().time}"
             val contentValues = ContentValues().apply {
                 put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
-                put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
+                put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
                 put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
             }
             val resolver = context.contentResolver

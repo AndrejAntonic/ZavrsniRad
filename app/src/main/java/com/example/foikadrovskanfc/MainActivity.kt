@@ -40,18 +40,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var fragmentManager: FragmentManager
     private lateinit var homeFragment: HomeFragment
-    private lateinit var settingsFragment: SettingsFragment
     private lateinit var infoFragment: InfoFragment
     private lateinit var currentFragment: Fragment
-    private val settingsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_LANG_CHANGED)
-                recreate()
-        }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //checkNfcCapability()
-        applyUserSettings()
 
         val toolbar = findViewById<Toolbar>(R.id.tb_mainActivity)
         setSupportActionBar(toolbar)
@@ -63,7 +56,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         fragmentManager = supportFragmentManager
         homeFragment = HomeFragment()
-        settingsFragment = SettingsFragment()
         infoFragment = InfoFragment()
 
         if (savedInstanceState == null) {
@@ -127,11 +119,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         currentFragment = when (item.itemId) {
             R.id.home -> homeFragment
-            R.id.settings -> {
-                drawerLayout.closeDrawer(GravityCompat.START)
-                settingsLauncher.launch(Intent(this, SettingsActivity::class.java))
-                return true
-            }
             R.id.info -> infoFragment
             R.id.clearDatabase -> {
                 showClearDatabasePopup()
@@ -158,7 +145,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (response != null) {
             homeFragment.loadPersonnelList()
         } else
-            Log.d("API Error", "Error occurred while fetching personnel data")
+            Log.e("API Error", "Error occurred while fetching personnel data")
     }
 
     private fun showClearDatabasePopup() {
@@ -183,96 +170,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         else
             onBackPressedDispatcher.onBackPressed()
     }
-    private fun applyUserSettings(): Boolean {
-        PreferenceManager.getDefaultSharedPreferences(this)?.
-        let { pref ->
-            SettingsActivity.switchDarkMode(
-                pref.getBoolean("preference_dark_mode", false)
-            )
-            val lang = pref.getString("preference_language", "EN")
-            if (lang != null) {
-                val locale = Locale(lang)
-                if (
-                    resources.configuration.locales[0].language != locale.language) {
-                    resources.configuration.setLocale(locale)
-                    Locale.setDefault(locale)
-                    createConfigurationContext(
-                        resources.configuration
-                    )
-                    recreate()
-                    return false
-                }
-            }
-        }
-        return true
-    }
+
     private fun changeStatusBarColor(window: Window, color: Int){
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = color
     }
-    private fun checkNfcCapability() {
-        val nfcUtils = NfcUtils(this)
-
-        if(nfcUtils.hasNfcCapability())
-            if(!nfcUtils.isNfcEnabled())
-                Toast.makeText(this, "NFC is supported but not enabled", Toast.LENGTH_SHORT).show()
-        else
-            showNfcNotSupportedDialog()
-    }
-    private fun showNfcNotSupportedDialog() {
-        val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.nfc_not_supported_dialog)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        val btnClose : Button = dialog.findViewById(R.id.btn_nfcNSupported)
-
-        btnClose.setOnClickListener{
-            finish()
-        }
-
-        dialog.show()
-    }
-/*
-    private fun showNfcNotEnabledDialog(){
-        val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.nfc_not_enabled_dialog)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        val btnClose : Button = dialog.findViewById(R.id.btn_nfcNEnabledClose)
-        val btnEnable : Button = dialog.findViewById(R.id.btn_nfcNEnabledEnable)
-
-        btnClose.setOnClickListener{
-            finish()
-        }
-
-        btnEnable.setOnClickListener{
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
-                val intent = Intent(Settings.ACTION_NFC_SETTINGS)
-                startActivity(intent)
-            }
-            else{
-                val intent = Intent(Settings.ACTION_WIRELESS_SETTINGS)
-                startActivity(intent)
-            }
-        }
-
-        dialog.show()
-    }
-
-
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.refresh -> ApiService.getPersonnelData { personnelList ->
-                    refreshPersonnelList(personnelList)
-                }
-        }
-        drawerLayout.closeDrawer(GravityCompat.START)
-        return true
-    }
- */
 }

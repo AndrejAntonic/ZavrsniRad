@@ -24,16 +24,6 @@
     </group>
 
     <group
-        android:id="@+id/menuSettings"
-        android:checkableBehavior="none">
-        <item
-            android:id="@+id/settings"
-            android:icon="@drawable/baseline_settings_24_black"
-            android:title="@string/settings"/>
-    </group>
-
-
-    <group
         android:id="@+id/menuInfo"
         android:checkableBehavior="single">
         <item

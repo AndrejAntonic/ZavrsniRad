@@ -131,6 +131,7 @@ class CanvasActivity : AppCompatActivity()/*, NfcAdapter.ReaderCallback*/ {
             nfcAdapter.disableForegroundDispatch(this)
     }
 
+    //For a different e-paper with a different driver -> needs to be changed -> don't know how
     var IC_DIY: String = "F0DB020000" //10
     var data_DB: String = "F0DB000067" //10
     var start: String = "A0060020007A00FA" //16

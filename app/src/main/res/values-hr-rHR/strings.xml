@@ -67,4 +67,5 @@
     <string name="save">Spremi</string>
     <string name="nfcAlertTitle">NFC nije uključen</string>
     <string name="nfcAlertMessage">Želite li ga uključiti?</string>
+    <string name="employeeSelected">Prvo izaberite zaposlenika.</string>
 </resources>

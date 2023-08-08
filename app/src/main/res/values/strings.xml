@@ -66,4 +66,5 @@
     <string name="save">Save</string>
     <string name="nfcAlertTitle">NFC is not enabled</string>
     <string name="nfcAlertMessage">Would you like to enable it?</string>
+    <string name="employeeSelected">Please select and emplyee first!</string>
 </resources>

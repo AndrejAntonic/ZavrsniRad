@@ -64,7 +64,7 @@ class HomeFragment : Fragment() {
                 startActivity(intent)
             }
             else
-                Toast.makeText(requireContext(), "Please select an employee first!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.employeeSelected), Toast.LENGTH_SHORT).show()
         }
 
         filterOn.setOnClickListener{

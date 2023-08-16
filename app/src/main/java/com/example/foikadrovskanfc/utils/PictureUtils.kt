@@ -16,6 +16,45 @@ class PictureUtils() {
     private val imageWidth = 400
     private val imageHeight = 300
 
+    fun generateImageBitmapLogo(context: Context): Bitmap {
+        val foiLogo = ContextCompat.getDrawable(context, R.drawable.foilogo75x65)
+        val bitmap = Bitmap.createBitmap(imageWidth, imageHeight, Bitmap.Config.ARGB_8888)
+        var canvas = Canvas(bitmap)
+        canvas.drawColor(Color.WHITE)
+
+        foiLogo?.let {
+            val logoWidth = imageWidth / 5
+            val logoHeight = imageHeight / 5
+
+            val logoBitmap = Bitmap.createBitmap(logoWidth, logoHeight, Bitmap.Config.ARGB_8888)
+            val logoCanvas = Canvas(logoBitmap)
+
+            it.setBounds(0, 0, logoWidth, logoHeight)
+            it.draw(logoCanvas)
+
+            val logoLeft = 5
+            val logoTop = 5
+            canvas.drawBitmap(logoBitmap, logoLeft.toFloat(), logoTop.toFloat(), null)
+        }
+
+        return bitmap
+    }
+
+    fun generateImageBitmapText(personnelList: ArrayList<Personnel>): Bitmap {
+        val bitmap = Bitmap.createBitmap(imageWidth, imageHeight, Bitmap.Config.ARGB_8888)
+        var canvas = Canvas(bitmap)
+        canvas.drawColor(Color.WHITE)
+
+        when(personnelList.size) {
+            1 -> canvas = addOnePersonnel(personnelList, canvas)
+            2 -> canvas = addTwoPersonnel(personnelList, canvas)
+            3 -> canvas = addThreePersonnel(personnelList, canvas)
+            4 -> canvas = addFourPersonnel(personnelList, canvas)
+        }
+
+        return bitmap
+    }
+
     fun generateImageBitmap(personnelList: ArrayList<Personnel>, context: Context): Bitmap {
         val foiLogo = ContextCompat.getDrawable(context, R.drawable.foilogo75x65)
         val bitmap = Bitmap.createBitmap(imageWidth, imageHeight, Bitmap.Config.ARGB_8888)

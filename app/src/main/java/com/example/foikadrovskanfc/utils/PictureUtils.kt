@@ -264,62 +264,36 @@ class PictureUtils() {
         return canvas
     }
 
-    fun applyFloydSteinbergDithering(bitmap: Bitmap): Bitmap {
-        val width = bitmap.width
-        val height = bitmap.height
-        val newBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+    fun convertPictureToByteArray(bitmap: Bitmap): ByteArray {
+        val byteArray = ByteArray(15000)
+        var index = 0
+        var temp = 0
 
-        for (y in 0 until height) {
-            for (x in 0 until width) {
-                val oldPixel = newBitmap.getPixel(x, y)
-                val grayscale = (Color.red(oldPixel) + Color.green(oldPixel) + Color.blue(oldPixel)) / 3
+        val pixels = IntArray(bitmap.width * bitmap.height)
+        bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+        for(x in (bitmap.height - 1) downTo 0) {
+            for(y in 0 until bitmap.width / 8) {
+                var tempBinary = ""
+                for(z in 0 until 8) {
+                    val red = Color.red(pixels[temp])
+                    val green = Color.green(pixels[temp])
+                    val blue = Color.blue(pixels[temp])
 
-                // Set the grayscale color to the pixel
-                newBitmap.setPixel(x, y, Color.rgb(grayscale, grayscale, grayscale))
-
-                val newPixel = newBitmap.getPixel(x, y)
-                val error = oldPixel - newPixel
-
-                // Distribute the error to neighboring pixels
-                if (x + 1 < width) {
-                    applyErrorToPixel(newBitmap, x + 1, y, error, 7 / 16f)
+                    val luminance = 0.299 * red + 0.587 * green + 0.114 * blue
+                    if(luminance < 128)
+                        tempBinary += "0"
+                    else
+                        tempBinary += "1"
+                    temp++
                 }
-                if (x - 1 >= 0 && y + 1 < height) {
-                    applyErrorToPixel(newBitmap, x - 1, y + 1, error, 3 / 16f)
-                }
-                if (y + 1 < height) {
-                    applyErrorToPixel(newBitmap, x, y + 1, error, 5 / 16f)
-                }
-                if (x + 1 < width && y + 1 < height) {
-                    applyErrorToPixel(newBitmap, x + 1, y + 1, error, 1 / 16f)
-                }
+                val decimalValue = Integer.parseInt(tempBinary, 2)
+                val hexValue = decimalValue.toString(16).toUpperCase()
+                byteArray[index] = hexValue.toInt(16).toByte()
+                index++
             }
         }
 
-        return newBitmap
+        return byteArray
     }
 
-    private fun applyErrorToPixel(bitmap: Bitmap, x: Int, y: Int, error: Int, weight: Float) {
-        val oldPixel = bitmap.getPixel(x, y)
-        val newPixel = Color.rgb(
-            clamp(Color.red(oldPixel) + (error * weight).toInt(), 0, 255),
-            clamp(Color.green(oldPixel) + (error * weight).toInt(), 0, 255),
-            clamp(Color.blue(oldPixel) + (error * weight).toInt(), 0, 255)
-        )
-        bitmap.setPixel(x, y, newPixel)
-    }
-
-    private fun clamp(value: Int, min: Int, max: Int): Int {
-        return value.coerceIn(min, max)
-    }
-
-    fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
-        val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-        return outputStream.toByteArray()
-    }
-
-    fun byteArrayToBitmap(it: ByteArray): Bitmap {
-        return BitmapFactory.decodeByteArray(it, 0, it.size)
-    }
 }

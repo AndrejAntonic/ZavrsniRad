@@ -33,12 +33,13 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: PersonnelAdapter
     private lateinit var twEmpty: TextView
     private lateinit var fabPersonnel: FloatingActionButton
-    private val checkedItems: MutableList<Personnel> = mutableListOf()
+    val checkedItems: MutableList<Personnel> = mutableListOf()
     private lateinit var filterOn: ImageButton
     private lateinit var filterOff: ImageButton
     private var selectedFilterOption: String = ""
     private var selectedFilterType: String = ""
     private lateinit var searchView: SearchView
+    private lateinit var sortedPersonnelList: List<Personnel>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
@@ -80,7 +81,7 @@ class HomeFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                val copyList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
+                val copyList = sortedPersonnelList
                 val filteredList = mutableListOf<Personnel>()
                 if(newText.isEmpty()) {
                     filteredList.addAll(copyList)
@@ -101,8 +102,8 @@ class HomeFragment : Fragment() {
                 return true
             }
         })
-
     }
+
     private fun findViews(view: View) {
         recyclerView = view.findViewById(R.id.rv_personnelRecords)
         twEmpty = view.findViewById(R.id.tw_empty)
@@ -113,8 +114,10 @@ class HomeFragment : Fragment() {
     }
     private fun clearFilter() {
         val personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
+        sortedPersonnelList = personnelList
         adapter = PersonnelAdapter(personnelList.toMutableList())
         recyclerView.adapter = adapter
+        checkedItems.clear()
     }
     private fun showDialog(){
         val newFilterView = LayoutInflater.from(requireContext()).inflate(R.layout.filter_options, null)
@@ -133,8 +136,9 @@ class HomeFragment : Fragment() {
         dialogHelper.populateSpinnerType()
     }
     private fun sortList() {
+        checkedItems.clear()
         val personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
-        val sortedPersonnelList = when (selectedFilterOption) {
+        sortedPersonnelList = when (selectedFilterOption) {
             "Name" -> {
                 if (selectedFilterType == "Ascending") {
                     personnelList.sortedBy { it.firstName }
@@ -161,10 +165,10 @@ class HomeFragment : Fragment() {
 
         adapter = PersonnelAdapter(sortedPersonnelList.toMutableList())
         recyclerView.adapter = adapter
-        //TODO: Maybe add retention of checked items?
     }
     fun loadPersonnelList() {
         val personnelList = PersonnelDatabase.getInstance().getPersonnelDAO().getAllPersonnel().toMutableList()
+        sortedPersonnelList = personnelList
         if (personnelList.isNotEmpty())
             twEmpty.text = ""
         else

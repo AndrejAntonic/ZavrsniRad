@@ -121,6 +121,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.home -> homeFragment
             R.id.info -> infoFragment
             R.id.clearDatabase -> {
+                homeFragment.checkedItems.clear()
                 showClearDatabasePopup()
                 drawerLayout.closeDrawer(GravityCompat.START)
                 return true

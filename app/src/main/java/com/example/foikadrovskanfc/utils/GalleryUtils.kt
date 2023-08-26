@@ -41,7 +41,6 @@ class GalleryUtils {
                 e.printStackTrace()
             }
         }else {
-            // For Android 9 and earlier (Legacy Storage)
             if (checkWriteStoragePermission(activity)) {
                 val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                 val file = File(path, "${displayName}_${Date().time}.jpg")

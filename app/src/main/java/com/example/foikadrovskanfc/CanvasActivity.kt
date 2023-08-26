@@ -67,7 +67,7 @@ class CanvasActivity : AppCompatActivity() {
 
         saveButton = findViewById(R.id.btn_saveImage)
         saveButton.setOnClickListener {
-            galleryUtils.saveBitmapToGallery(this, logoBitmap, "FOI-kadrovska", this@CanvasActivity)
+            galleryUtils.saveBitmapToGallery(this, generatedImageBitmap, "FOI-kadrovska", this@CanvasActivity)
             Toast.makeText(this, "Slika spremljena", Toast.LENGTH_SHORT).show()
         }
 
